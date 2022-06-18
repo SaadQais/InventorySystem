@@ -13,13 +13,8 @@ namespace InventorySystem.Infrastructure.Services
             _contextAccessor = contextAccessor;
         }
 
-        public string UserId
-        {
-            get
-            {
-                var nameId = _contextAccessor.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-                return nameId != null ? int.Parse(nameId.Value) : -1;
-            }
-        }
+        public string UserId => _contextAccessor.HttpContext.User.Claims
+            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
     }
 }

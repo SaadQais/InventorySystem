@@ -15,20 +15,18 @@ namespace InventorySystem.Domain.Repositories
             _context = context;
         }
         
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public IQueryable<T> GetAll()
         {
-            return await _context.Set<T>()
-                .ToListAsync();
+            return _context.Set<T>();
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>()
-                .Where(predicate)
-                .ToListAsync();
+            return _context.Set<T>()
+                .Where(predicate);
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, 
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, 
             IOrderedQueryable<T>> orderBy = null, string includeString = null, bool disableTracking = true)
         {
             IQueryable<T> query = _context.Set<T>();
@@ -37,14 +35,14 @@ namespace InventorySystem.Domain.Repositories
 
             if (!string.IsNullOrEmpty(includeString)) query = query.Include(includeString);
 
-            if (orderBy != null) return await orderBy(query).ToListAsync();
+            if (orderBy != null) return  orderBy(query);
 
             if (disableTracking) query = query.AsNoTracking();
 
-            return await query.ToListAsync();
+            return query;
         }
 
-        public async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, 
+        public IQueryable<T> Get(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, 
             IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true)
         {
             IQueryable<T> query = _context.Set<T>();
@@ -53,11 +51,11 @@ namespace InventorySystem.Domain.Repositories
 
             if (includes != null) query = includes.Aggregate(query, (current, include) => current.Include(include));
 
-            if (orderBy != null) return await orderBy(query).ToListAsync();
+            if (orderBy != null) return orderBy(query);
 
             if (disableTracking) query = query.AsNoTracking();
 
-            return await query.ToListAsync();
+            return query;
         }
 
         public async Task<T> GetByIdAsync(int id)
