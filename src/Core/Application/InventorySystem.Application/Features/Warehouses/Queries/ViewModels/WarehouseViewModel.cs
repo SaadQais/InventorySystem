@@ -1,10 +1,12 @@
-﻿using MediatR;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
-namespace InventorySystem.Application.Features.Warehouses.Commands.CreateWarehouse
+namespace InventorySystem.Application.Features.Warehouses.Queries.ViewModels
 {
-    public class CreateWarehouseCommand : IRequest
+    public class WarehouseViewModel
     {
+        public int Id { get; set; }
+
         [Display(Name = "الأسم")]
         public string Name { get; set; }
 

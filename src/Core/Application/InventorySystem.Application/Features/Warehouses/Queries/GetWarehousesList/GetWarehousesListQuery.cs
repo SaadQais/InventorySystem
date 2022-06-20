@@ -1,10 +1,10 @@
-﻿using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList.ViewModels;
+﻿using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
 using MediatR;
 using X.PagedList;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList
 {
-    public class GetWarehousesListQuery : IRequest<IPagedList<WarehouseVM>>
+    public class GetWarehousesListQuery : IRequest<IPagedList<WarehouseViewModel>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventorySystem.Application.Contracts.Persistence;
-using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList.ViewModels;
+using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
 using InventorySystem.Domain.Entities;
 using MediatR;
 using X.PagedList;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList
 {
-    public class GetWarehouseListQueryHandler : IRequestHandler<GetWarehousesListQuery, IPagedList<WarehouseVM>>
+    public class GetWarehouseListQueryHandler : IRequestHandler<GetWarehousesListQuery, IPagedList<WarehouseViewModel>>
     {
         private readonly IAsyncRepository<Warehouse> _repository;
         private readonly IMapper _mapper;
@@ -19,11 +19,11 @@ namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesL
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         
-        public async Task<IPagedList<WarehouseVM>> Handle(GetWarehousesListQuery request, CancellationToken cancellationToken)
+        public async Task<IPagedList<WarehouseViewModel>> Handle(GetWarehousesListQuery request, CancellationToken cancellationToken)
         {
             return await _repository
                 .GetAll()
-                .ProjectTo<WarehouseVM>(_mapper.ConfigurationProvider)
+                .ProjectTo<WarehouseViewModel>(_mapper.ConfigurationProvider)
                 .ToPagedListAsync(request.PageNumber, request.PageSize);
         }
     }
