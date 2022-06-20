@@ -66,16 +66,10 @@
                                 <p>المستخدمين</p>
                             </a>
                         </li>
-                        <li class="nav-item @(ViewBag.Current == "Lands" ? "active" : "")">
-                            <a class="nav-link" asp-controller="Lands" asp-action="Index">
-                                <i class="material-icons">location_city</i>
-                                <p>الأراضي</p>
-                            </a>
-                        </li>
-                        <li class="nav-item @(ViewBag.Current == "Contracts" ? "active" : "")">
-                            <a class="nav-link" asp-controller="Contracts" asp-action="Index">
-                                <i class="material-icons">description</i>
-                                <p>العقود</p>
+                        <li class="nav-item @(ViewBag.Current == "Warehouses" ? "active" : "")">
+                            <a class="nav-link" asp-controller="Warehouses" asp-action="Index">
+                                <i class="material-icons">warehouse</i>
+                                <p>المخازن</p>
                             </a>
                         </li>
                     </ul>
