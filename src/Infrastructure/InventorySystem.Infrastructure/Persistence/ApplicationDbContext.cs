@@ -1,19 +1,24 @@
-﻿using InventorySystem.Application.Contracts.Infrastructure;
-using InventorySystem.Domain.Common;
+﻿using InventorySystem.Domain.Common;
 using InventorySystem.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace InventorySystem.Infrastructure.Persistence
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, 
+            IHttpContextAccessor httpContextAccessor) : base(options)
         {
-            
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -23,11 +28,11 @@ namespace InventorySystem.Infrastructure.Persistence
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedDate = DateTime.Now;
-                        entry.Entity.CreatedBy = "";//_userService.UserId;
+                        entry.Entity.CreatedBy = _httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModifiedDate = DateTime.Now;
-                        entry.Entity.LastModifiedBy = "";//_userService.UserId;
+                        entry.Entity.LastModifiedBy = _httpContextAccessor?.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                         break;
                 }
             }

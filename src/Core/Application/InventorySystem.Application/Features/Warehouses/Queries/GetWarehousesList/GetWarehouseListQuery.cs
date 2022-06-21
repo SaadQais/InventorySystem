@@ -4,12 +4,12 @@ using X.PagedList;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList
 {
-    public class GetWarehousesListQuery : IRequest<IPagedList<WarehouseViewModel>>
+    public class GetWarehouseListQuery : IRequest<IPagedList<WarehouseViewModel>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
-        public GetWarehousesListQuery(int? pageNumber, int? pageSize)
+        public GetWarehouseListQuery(int? pageNumber, int? pageSize)
         {
             PageNumber = pageNumber ?? 1;
             PageSize = pageSize ?? 20;

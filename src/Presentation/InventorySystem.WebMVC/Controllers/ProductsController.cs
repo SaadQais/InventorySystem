@@ -1,9 +1,9 @@
-﻿using InventorySystem.Application.Features.Warehouses.Commands.CreateWarehouse;
-using InventorySystem.Application.Features.Warehouses.Commands.DeleteWarehouse;
-using InventorySystem.Application.Features.Warehouses.Commands.UpdateWarehouse;
-using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesById;
-using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
-using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
+﻿using InventorySystem.Application.Features.Products.Commands.CreateProduct;
+using InventorySystem.Application.Features.Products.Commands.DeleteProduct;
+using InventorySystem.Application.Features.Products.Commands.UpdateProduct;
+using InventorySystem.Application.Features.Products.Queries.GetProductsById;
+using InventorySystem.Application.Features.Products.Queries.GetProductsList;
+using InventorySystem.Application.Features.Products.Queries.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,27 +12,27 @@ using Microsoft.EntityFrameworkCore;
 namespace InventorySystem.WebMVC.Controllers
 {
     [Authorize]
-    public class WarehousesController : Controller
+    public class ProductsController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
 
-        public WarehousesController(IWebHostEnvironment hostEnvironment, IMediator mediator)
+        public ProductsController(IWebHostEnvironment hostEnvironment, IMediator mediator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(WarehouseSearchModel search, int page = 1, int pageSize = 20)
+        public async Task<IActionResult> Index(ProductSearchModel search, int page = 1, int pageSize = 20)
         {
-            ViewBag.Current = "Warehouses";
+            ViewBag.Current = "Products";
 
             ViewData["SearchVM"] = search;
 
-            var warehouses = await _mediator.Send(new GetWarehouseListQuery(page, pageSize));
+            var Products = await _mediator.Send(new GetProductListQuery(page, pageSize));
 
-            return View(warehouses);
+            return View(Products);
         }
 
         [HttpGet]
@@ -43,14 +43,14 @@ namespace InventorySystem.WebMVC.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _mediator.Send(new GetWarehouseByIdQuery { Id = id.Value });
+            var Product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
 
-            if (warehouse == null)
+            if (Product == null)
             {
                 return NotFound();
             }
 
-            return View(warehouse);
+            return View(Product);
         }
 
         [HttpGet]
@@ -61,15 +61,15 @@ namespace InventorySystem.WebMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateWarehouseCommand warehouse)
+        public async Task<IActionResult> Create(CreateProductCommand Product)
         {
             if (ModelState.IsValid)
             {
-                await _mediator.Send(warehouse);
+                await _mediator.Send(Product);
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(warehouse);
+            return View(Product);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -79,21 +79,21 @@ namespace InventorySystem.WebMVC.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _mediator.Send(new GetWarehouseByIdQuery { Id = id.Value });
+            var Product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
 
-            if (warehouse == null)
+            if (Product == null)
             {
                 return NotFound();
             }
 
-            return View(warehouse);
+            return View(Product);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateWarehouseCommand warehouse)
+        public async Task<IActionResult> Edit(int id, UpdateProductCommand Product)
         {
-            if (id != warehouse.Id)
+            if (id != Product.Id)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace InventorySystem.WebMVC.Controllers
             {
                 try
                 {
-                    await _mediator.Send(warehouse);
+                    await _mediator.Send(Product);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -110,7 +110,7 @@ namespace InventorySystem.WebMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(warehouse);
+            return View(Product);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -120,21 +120,21 @@ namespace InventorySystem.WebMVC.Controllers
                 return NotFound();
             }
 
-            var warehouse = await _mediator.Send(new GetWarehouseByIdQuery { Id = id.Value });
+            var Product = await _mediator.Send(new GetProductByIdQuery { Id = id.Value });
 
-            if (warehouse == null)
+            if (Product == null)
             {
                 return NotFound();
             }
 
-            return View(warehouse);
+            return View(Product);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _mediator.Send(new DeleteWarehouseCommand { Id = id });
+            await _mediator.Send(new DeleteProductCommand { Id = id });
             return RedirectToAction(nameof(Index));
         }
     }

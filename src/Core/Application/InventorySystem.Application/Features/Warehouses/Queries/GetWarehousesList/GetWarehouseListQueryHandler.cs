@@ -8,7 +8,7 @@ using X.PagedList;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList
 {
-    public class GetWarehouseListQueryHandler : IRequestHandler<GetWarehousesListQuery, IPagedList<WarehouseViewModel>>
+    public class GetWarehouseListQueryHandler : IRequestHandler<GetWarehouseListQuery, IPagedList<WarehouseViewModel>>
     {
         private readonly IAsyncRepository<Warehouse> _repository;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesL
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         
-        public async Task<IPagedList<WarehouseViewModel>> Handle(GetWarehousesListQuery request, CancellationToken cancellationToken)
+        public async Task<IPagedList<WarehouseViewModel>> Handle(GetWarehouseListQuery request, CancellationToken cancellationToken)
         {
             return await _repository
                 .GetAll()
