@@ -2,10 +2,10 @@
 using InventorySystem.Application.Behaviours;
 using InventorySystem.Application.Contracts.Infrastructure;
 using InventorySystem.Application.Contracts.Persistence;
+using InventorySystem.Application.Services;
 using InventorySystem.Domain.Entities;
 using InventorySystem.Domain.Repositories;
 using InventorySystem.Infrastructure.Persistence;
-using InventorySystem.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +35,12 @@ namespace InventorySystem.IoC
 
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+                options.LogoutPath = "/Identity/Account/Logout";
+            });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

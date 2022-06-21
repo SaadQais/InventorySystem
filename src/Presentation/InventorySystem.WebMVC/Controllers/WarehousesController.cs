@@ -5,11 +5,10 @@ using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesById;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ManagingLands.WebMVC.Controllers
+namespace InventorySystem.WebMVC.Controllers
 {
     //[Authorize]
     public class WarehousesController : Controller

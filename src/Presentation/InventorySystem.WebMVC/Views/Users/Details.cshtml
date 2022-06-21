@@ -1,0 +1,78 @@
+﻿@model InventorySystem.Application.Models.User.UserViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="row">
+                    <div class="col-6">
+                        <h3 class="card-title ">تفاصيل المستخدم</h3>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <br />
+            <div class="card-body">
+                <div class="p-4  border rounded">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="col-8">
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="UserName"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="UserName" disabled class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="PhoneNumber"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="PhoneNumber" disabled class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Email"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Email" disabled class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="UserRole"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="UserRole" disabled class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-1">
+
+                    </div>
+
+                    <div class="col-3">
+
+                    </div>
+
+                    <div class="form-group">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">تعديل</a>
+                        <a asp-action="Index" class="btn btn-danger">العوده الى القائمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
