@@ -6,6 +6,7 @@ namespace InventorySystem.Domain.Entities.Invoices
     {
         public int ProductId { get; set; }
         public int InvoiceId { get; set; }
+        public int Count { get; set; }
 
         public Product Product { get; set; }
         public Invoice Invoice { get; set; }
