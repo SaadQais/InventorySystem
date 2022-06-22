@@ -6,6 +6,7 @@ using InventorySystem.Application.Services;
 using InventorySystem.Domain.Entities;
 using InventorySystem.Domain.Repositories;
 using InventorySystem.Infrastructure.Persistence;
+using InventorySystem.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -45,11 +46,13 @@ namespace InventorySystem.IoC
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+            //services.AddMediatR(Assembly.GetExecutingAssembly());
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+            services.AddScoped(typeof(IInvoiceRepository), typeof(InvoiceRepository));
             services.AddScoped<IUserService, UserService>();
         }
     }

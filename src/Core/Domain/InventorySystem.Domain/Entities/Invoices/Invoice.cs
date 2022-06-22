@@ -11,7 +11,7 @@ namespace InventorySystem.Domain.Entities.Invoices
         public string Client { get; set; }
         public string Description { get; set; }
 
-        public int WarehouseId { get; set; }
+        public int? WarehouseId { get; set; }
         public Warehouse Warehouse { get; set; }
 
         public ICollection<InvoiceProduct> InvoiceProducts { get; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventorySystem.Application.Features.Products.Queries.ViewModels
 {
-    public class ProductViewModel
+    public class ProductViewModel1
     {
         public int Id { get; set; }
 

@@ -1,3 +1,4 @@
+using InventorySystem.Application;
 using InventorySystem.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
