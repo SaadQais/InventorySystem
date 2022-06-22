@@ -1,5 +1,6 @@
 ﻿using InventorySystem.Domain.Common;
 using InventorySystem.Domain.Entities;
+using InventorySystem.Domain.Entities.Invoices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,8 @@ namespace InventorySystem.Infrastructure.Persistence
 
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceProduct> InvoiceProducts { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
