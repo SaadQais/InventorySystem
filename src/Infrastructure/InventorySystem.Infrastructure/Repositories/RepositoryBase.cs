@@ -63,6 +63,15 @@ namespace InventorySystem.Domain.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>> includes = null)
+        {
+            IQueryable<T> entity =  _context.Set<T>();
+
+            if (includes != null) entity = includes.Aggregate(entity, (current, include) => current.Include(include));
+
+            return await entity.FirstOrDefaultAsync(i => i.Id == id);
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);

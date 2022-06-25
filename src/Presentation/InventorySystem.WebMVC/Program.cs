@@ -23,9 +23,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapAreaControllerRoute(
+    name: "Invoices",
+    areaName: "Invoices",
+    pattern: "Invoices/{controller}/{action=Index}"
+);
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

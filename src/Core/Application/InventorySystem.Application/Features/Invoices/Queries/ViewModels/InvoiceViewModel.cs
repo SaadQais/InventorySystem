@@ -11,6 +11,7 @@ namespace InventorySystem.Application.Features.Invoices.Queries.ViewModels
         [Display(Name = "رقم الوصل")]
         public string Number { get; set; }
 
+        [Display(Name = "نوع الوصل")]
         public InvoiceType Type { get; set; }
 
         [Display(Name = "المزود")]
@@ -20,5 +21,8 @@ namespace InventorySystem.Application.Features.Invoices.Queries.ViewModels
         public string Description { get; set; }
 
         public WarehouseViewModel Warehouse { get; set; }
+
+        [Display(Name = "المخزن")]
+        public int WarehouseId { get; set; }
     }
 }

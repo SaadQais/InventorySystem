@@ -1,4 +1,4 @@
-﻿@model InventorySystem.Application.Features.Products.Queries.ViewModels.ProductViewModel
+﻿@model InventorySystem.Application.Features.Invoices.Queries.ViewModels.InvoiceViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,7 +10,7 @@
             <div class="card-header card-header-primary">
                 <div class="row">
                     <div class="col-12 text-right">
-                        <h3 class="card-title ">حذف ماده</h3>
+                        <h3 class="card-title ">حذف الوصل</h3>
                     </div>
                 </div>
                 <br />
@@ -23,37 +23,10 @@
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="Name"></label>
+                                <label asp-for="Number"></label>
                             </div>
                             <div class="col-6">
-                                <input asp-for="Name" disabled class="form-control" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="Code"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="Code" disabled class="form-control" />
-                            </div>
-                        </div>
-
-						<div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="Barcode"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="Barcode" disabled class="form-control" />
-                            </div>
-                        </div>
-
-						<div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="SerialNumber"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="SerialNumber" disabled class="form-control" />
+                                <input asp-for="Number" disabled class="form-control" />
                             </div>
                         </div>
 
@@ -66,12 +39,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+						<div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="UOM"></label>
+                                <label asp-for="Supplier"></label>
                             </div>
                             <div class="col-6">
-                                <input asp-for="UOM" disabled class="form-control" />
+                                <input asp-for="Supplier" disabled class="form-control" />
+                            </div>
+                        </div>
+
+						<div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Warehouse.Name"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Warehouse.Name" disabled class="form-control" />
                             </div>
                         </div>
 

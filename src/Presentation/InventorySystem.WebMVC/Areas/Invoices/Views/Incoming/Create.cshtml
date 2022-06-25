@@ -1,5 +1,5 @@
 ﻿@using InventorySystem.Domain.Enums
-@model InventorySystem.Application.Features.Products.Commands.CreateProduct.CreateProductCommand
+@model InventorySystem.Application.Features.Invoices.Commands.CreateInvoice.CreateInvoiceCommand
 
 @{
     ViewData["Title"] = "Create";
@@ -11,7 +11,7 @@
             <div class="card-header card-header-primary">
                 <div class="row">
                     <div class="col-12 text-right">
-                        <h3 class="card-title ">أضافة ماده جديدة</h3>
+                        <h3 class="card-title ">أضافة وصل جديد</h3>
                     </div>
                 </div>
                 <br />
@@ -24,64 +24,33 @@
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="Name"></label>
+                                <label asp-for="Number"></label>
                             </div>
                             <div class="col-6">
-                                <input asp-for="Name" class="form-control" />
+                                <input asp-for="Number" class="form-control" />
                             </div>
-                            <span asp-validation-for="Name" class="text-danger"></span>
+                            <span asp-validation-for="Number" class="text-danger"></span>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="Code"></label>
+                                <label asp-for="Supplier"></label>
                             </div>
                             <div class="col-6">
-                                <input asp-for="Code" class="form-control" />
+                                <input asp-for="Supplier" class="form-control" />
                             </div>
-                            <span asp-validation-for="Code" class="text-danger"></span>
+                            <span asp-validation-for="Supplier" class="text-danger"></span>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="Barcode"></label>
+                                <label asp-for="WarehouseId"></label>
                             </div>
                             <div class="col-6">
-                                <input asp-for="Barcode" class="form-control" />
-                            </div>
-                            <span asp-validation-for="Barcode" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="SerialNumber"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="SerialNumber" class="form-control" />
-                            </div>
-                            <span asp-validation-for="SerialNumber" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="Type"></label>
-                            </div>
-                            <div class="col-6">
-                                <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<ProductType>()">
+                                <select asp-for="WarehouseId" class="form-control" asp-items="(SelectList)@ViewData["WarehouseId"]">
                                 </select>
                             </div>
-                            <span asp-validation-for="Type" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="UOM"></label>
-                            </div>
-                            <div class="col-6">
-                                <select asp-for="UOM" class="form-control" asp-items="Html.GetEnumSelectList<UOM>()">
-                                </select>
-                            </div>
-                            <span asp-validation-for="UOM" class="text-danger"></span>
+                            <span asp-validation-for="WarehouseId" class="text-danger"></span>
                         </div>
 
                         <div class="form-group row">

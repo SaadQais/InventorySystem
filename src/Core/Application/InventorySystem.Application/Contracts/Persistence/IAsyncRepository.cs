@@ -14,6 +14,8 @@ namespace InventorySystem.Application.Contracts.Persistence
             IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true);
 
         Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>> includes = null);
+
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);

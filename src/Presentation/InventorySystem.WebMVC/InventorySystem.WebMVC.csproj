@@ -16,4 +16,11 @@
     <ProjectReference Include="..\..\IoC\InventorySystem.IoC\InventorySystem.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Invoices\Views\Incoming\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
