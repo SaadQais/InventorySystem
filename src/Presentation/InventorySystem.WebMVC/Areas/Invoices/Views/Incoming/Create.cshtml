@@ -138,7 +138,7 @@
 
         $("#removeInvoiceProductBtn").bind("click", function () {
             --index;
-            $('#invoiceProductRow').last().remove();
+            $('.invoiceProductRow').last().remove();
         });
 
         $("#invoiceProductSelect").select2({
@@ -174,7 +174,7 @@
 
             var i = index + 1;
            
-            return '<tr id="invoiceProductRow">' +
+            return '<tr class="invoiceProductRow">' +
                 '<th scope="row">' + i + '</th>' +
                 '<td><select id="invoiceProductSelect' + index +'" name="InvoiceProducts[' + index +'].ProductId" class="form-control rtlSelect2"></select></td> ' +
                 '<td><input type="number" required name="InvoiceProducts[' + index + '].Count" class="form-control" /></td>' +

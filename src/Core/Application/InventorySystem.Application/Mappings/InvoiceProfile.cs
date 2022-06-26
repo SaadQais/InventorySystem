@@ -13,6 +13,7 @@ namespace InventorySystem.Application.Mappings
             CreateMap<Invoice, InvoiceViewModel>().ReverseMap();
             CreateMap<Invoice, CreateInvoiceCommand>().ReverseMap();
             CreateMap<Invoice, UpdateInvoiceCommand>().ReverseMap();
+            CreateMap<InvoiceProduct, InvoiceProductModel>().ReverseMap();
         }
     }
 }
