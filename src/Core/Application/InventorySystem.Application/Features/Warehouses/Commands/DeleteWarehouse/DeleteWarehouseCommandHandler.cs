@@ -1,6 +1,6 @@
 ﻿using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Exceptions;
-using InventorySystem.Domain.Entities;
+using InventorySystem.Domain.Entities.Warehouses;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

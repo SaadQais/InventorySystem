@@ -1,6 +1,7 @@
 ﻿using InventorySystem.Domain.Common;
 using InventorySystem.Domain.Entities;
 using InventorySystem.Domain.Entities.Invoices;
+using InventorySystem.Domain.Entities.Warehouses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

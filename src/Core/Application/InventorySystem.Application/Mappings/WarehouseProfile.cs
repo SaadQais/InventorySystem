@@ -2,7 +2,7 @@
 using InventorySystem.Application.Features.Warehouses.Commands.CreateWarehouse;
 using InventorySystem.Application.Features.Warehouses.Commands.UpdateWarehouse;
 using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
-using InventorySystem.Domain.Entities;
+using InventorySystem.Domain.Entities.Warehouses;
 
 namespace InventorySystem.Application.Mappings
 {

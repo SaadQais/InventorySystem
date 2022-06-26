@@ -1,4 +1,5 @@
 ﻿using InventorySystem.Domain.Common;
+using InventorySystem.Domain.Entities.Warehouses;
 using InventorySystem.Domain.Enums;
 
 namespace InventorySystem.Domain.Entities.Invoices

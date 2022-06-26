@@ -2,7 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
-using InventorySystem.Domain.Entities;
+using InventorySystem.Domain.Entities.Warehouses;
 using MediatR;
 using X.PagedList;
 

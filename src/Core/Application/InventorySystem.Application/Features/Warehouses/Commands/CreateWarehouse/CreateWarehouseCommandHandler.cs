@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using InventorySystem.Application.Contracts.Persistence;
-using InventorySystem.Domain.Entities;
+using InventorySystem.Domain.Entities.Warehouses;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

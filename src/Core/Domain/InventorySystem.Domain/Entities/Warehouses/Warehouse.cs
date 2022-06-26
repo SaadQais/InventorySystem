@@ -1,6 +1,6 @@
 ﻿using InventorySystem.Domain.Common;
 
-namespace InventorySystem.Domain.Entities
+namespace InventorySystem.Domain.Entities.Warehouses
 {
     public class Warehouse : EntityBase
     {
