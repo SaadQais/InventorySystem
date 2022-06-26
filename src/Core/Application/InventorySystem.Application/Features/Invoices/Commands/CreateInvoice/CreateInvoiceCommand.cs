@@ -19,5 +19,8 @@ namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
 
         [Display(Name = "المخزن")]
         public int WarehouseId { get; set; }
+
+        [Display(Name = "مواد الوصل")]
+        public List<InvoiceProductModel> InvoiceProducts { get; set; }
     }
 }

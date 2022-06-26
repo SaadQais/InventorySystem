@@ -4,6 +4,7 @@ using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesList;
 using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
+using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
 using InventorySystem.Domain.Entities.Invoices;
@@ -62,6 +63,8 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         public async Task<IActionResult> CreateAsync()
         {
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), "Id", "Name");
+            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, 20)), "Id", "Name");
+
             return View();
         }
 
@@ -152,6 +155,17 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         {
             await _mediator.Send(new DeleteInvoiceCommand { Id = id });
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string term)
+        {
+            var products = await _mediator.Send(new GetProductListQuery(1, int.MaxValue));
+
+            var data = products//.Where(a => a.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
+                .ToList().AsReadOnly();
+
+            return Ok(data);
         }
     }
 }
