@@ -28,6 +28,8 @@ namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
 
             _logger.LogInformation($"Invoice {invoice.Id} is successfully added.");
 
+            await _repository.UpdateWarehouseProductsAsync(invoice);
+
             return Unit.Value;
         }
     }

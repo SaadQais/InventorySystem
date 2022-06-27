@@ -23,6 +23,7 @@ namespace InventorySystem.Infrastructure.Persistence
         public DbSet<Product> Products { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceProduct> InvoiceProducts { get; set; }
+        public DbSet<WarehouseProduct> WarehouseProducts { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
