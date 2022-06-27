@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using InventorySystem.Application.Contracts.Persistence;
-using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
+using InventorySystem.Application.Features.Invoices.Models;
 using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
 using System.Linq.Expressions;
@@ -20,10 +20,7 @@ namespace InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById
         
         public async Task<InvoiceViewModel> Handle(GetInvoiceByIdQuery request, CancellationToken cancellationToken)
         {
-            var invoice = await _repository.GetByIdAsync(request.Id, new List<Expression<Func<Invoice, object>>>
-            {
-                x => x.Warehouse,
-            });
+            var invoice = await _repository.GetCustomByIdAsync(request.Id);
 
             return _mapper.Map<InvoiceViewModel>(invoice);
         }

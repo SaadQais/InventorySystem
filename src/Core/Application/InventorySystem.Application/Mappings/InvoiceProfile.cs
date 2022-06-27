@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
-using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
+using InventorySystem.Application.Features.Invoices.Models;
 using InventorySystem.Domain.Entities.Invoices;
 
 namespace InventorySystem.Application.Mappings

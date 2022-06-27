@@ -1,4 +1,4 @@
-﻿namespace InventorySystem.Application.Features.Invoices.Queries.ViewModels
+﻿namespace InventorySystem.Application.Features.Invoices.Models
 {
     public class InvoiceSearchModel
     {

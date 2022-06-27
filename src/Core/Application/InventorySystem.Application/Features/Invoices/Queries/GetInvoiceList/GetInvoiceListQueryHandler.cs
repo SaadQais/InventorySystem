@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using InventorySystem.Application.Contracts.Persistence;
-using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
+using InventorySystem.Application.Features.Invoices.Models;
 using MediatR;
 using X.PagedList;
 

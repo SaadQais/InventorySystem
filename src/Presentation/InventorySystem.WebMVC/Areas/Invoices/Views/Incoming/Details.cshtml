@@ -1,5 +1,5 @@
-﻿@model InventorySystem.Application.Features.Invoices.Queries.ViewModels.InvoiceViewModel
-
+﻿@model InvoiceViewModel
+@using InventorySystem.Application.Features.Invoices.Models;
 @{
     ViewData["Title"] = "Details";
 }
@@ -75,7 +75,7 @@
 
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group text-left">
                         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-info">تعديل</a>
                         <a asp-action="Index" class="btn btn-default">العوده الى القائمة</a>
                     </div>

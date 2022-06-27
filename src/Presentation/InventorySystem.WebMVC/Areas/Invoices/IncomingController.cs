@@ -1,9 +1,9 @@
 ﻿using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.DeleteInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
+using InventorySystem.Application.Features.Invoices.Models;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesList;
-using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
@@ -100,6 +100,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
 
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), 
                 "Id", "Name", invoice.Warehouse.Id);
+
             return View(invoice);
         }
 

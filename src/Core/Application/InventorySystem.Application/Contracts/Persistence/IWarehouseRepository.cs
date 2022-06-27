@@ -7,5 +7,6 @@ namespace InventorySystem.Application.Contracts.Persistence
     {
         Task UpdateWhenCreateInvoiceAsync(Invoice invoice);
         Task UpdateWhenDeleteInvoiceAsync(Invoice invoice);
+        Task UpdateWhenUpdateInvoiceAsync(Invoice oldInvoice, Invoice newInvoice);
     }
 }

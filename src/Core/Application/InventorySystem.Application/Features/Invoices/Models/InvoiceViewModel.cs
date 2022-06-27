@@ -1,8 +1,9 @@
 ﻿using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
+using InventorySystem.Domain.Entities.Invoices;
 using InventorySystem.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace InventorySystem.Application.Features.Invoices.Queries.ViewModels
+namespace InventorySystem.Application.Features.Invoices.Models
 {
     public class InvoiceViewModel
     {
@@ -24,5 +25,8 @@ namespace InventorySystem.Application.Features.Invoices.Queries.ViewModels
 
         [Display(Name = "المخزن")]
         public int WarehouseId { get; set; }
+
+        [Display(Name = "مواد الوصل")]
+        public ICollection<InvoiceProduct> InvoiceProducts { get; set; }
     }
 }

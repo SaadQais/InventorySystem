@@ -1,4 +1,4 @@
-﻿using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
+﻿using InventorySystem.Application.Features.Invoices.Models;
 using MediatR;
 using X.PagedList;
 

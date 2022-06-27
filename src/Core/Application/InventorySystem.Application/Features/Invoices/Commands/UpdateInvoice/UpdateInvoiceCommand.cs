@@ -1,7 +1,7 @@
-﻿using InventorySystem.Domain.Enums;
+﻿using InventorySystem.Application.Features.Invoices.Models;
+using InventorySystem.Domain.Enums;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice
 {
@@ -21,5 +21,8 @@ namespace InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice
         public string Description { get; set; }
 
         public int WarehouseId { get; set; }
+
+        [Display(Name = "مواد الوصل")]
+        public List<InvoiceProductModel> InvoiceProducts { get; set; }
     }
 }

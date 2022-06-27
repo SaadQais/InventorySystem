@@ -64,5 +64,11 @@ namespace InventorySystem.Infrastructure.Repositories
                 }
             }
         }
+
+        public async Task UpdateWhenUpdateInvoiceAsync(Invoice oldInvoice, Invoice newInvoice)
+        {
+            await UpdateWhenDeleteInvoiceAsync(oldInvoice);
+            await UpdateWhenCreateInvoiceAsync(newInvoice);
+        }
     }
 }

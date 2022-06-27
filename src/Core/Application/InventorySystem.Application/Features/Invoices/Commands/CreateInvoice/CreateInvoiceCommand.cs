@@ -1,4 +1,5 @@
-﻿using InventorySystem.Domain.Enums;
+﻿using InventorySystem.Application.Features.Invoices.Models;
+using InventorySystem.Domain.Enums;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 

@@ -3,6 +3,7 @@ using InventorySystem.Domain.Common;
 using InventorySystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace InventorySystem.Domain.Repositories
 {
@@ -63,11 +64,13 @@ namespace InventorySystem.Domain.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>> includes = null)
+        public async Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true)
         {
             IQueryable<T> entity =  _context.Set<T>();
 
             if (includes != null) entity = includes.Aggregate(entity, (current, include) => current.Include(include));
+
+            if (disableTracking) entity = entity.AsNoTracking();
 
             return await entity.FirstOrDefaultAsync(i => i.Id == id);
         }
