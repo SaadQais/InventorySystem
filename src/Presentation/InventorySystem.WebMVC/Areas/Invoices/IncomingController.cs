@@ -7,7 +7,6 @@ using InventorySystem.Application.Features.Invoices.Queries.ViewModels;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
-using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,8 +61,8 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         [HttpGet]
         public async Task<IActionResult> CreateAsync()
         {
-            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), "Id", "Name");
-            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, 20)), "Id", "Name");
+            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)), "Id", "Name");
+            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
 
             return View();
         }
@@ -79,7 +78,8 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, 20)));
+            ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
+            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
 
             return View(invoice);
         }

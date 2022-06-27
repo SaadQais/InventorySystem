@@ -53,6 +53,7 @@ namespace InventorySystem.IoC
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
             services.AddScoped(typeof(IInvoiceRepository), typeof(InvoiceRepository));
+            services.AddScoped(typeof(IWarehouseRepository), typeof(WarehouseRepository));
             services.AddScoped<IUserService, UserService>();
         }
     }
