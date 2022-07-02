@@ -1,0 +1,221 @@
+﻿@using InventorySystem.Domain.Enums
+@model InventorySystem.Application.Features.Invoices.Models.InvoiceViewModel
+@{
+    ViewData["Title"] = "Edit";
+    int index = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <h3 class="card-title ">تعديل معلومات الوصل</h3>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <br />
+            <div class="card-body">
+                <form method="post" asp-action="Edit">
+                    <div class="p-4 border rounded">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Number"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Number" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Number" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Supplier"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Supplier" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Supplier" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="WarehouseId"></label>
+                            </div>
+                            <div class="col-6">
+                                <select asp-for="WarehouseId" class="form-control" asp-items="(SelectList)@ViewData["WarehouseId"]">
+                                </select>
+                            </div>
+                            <span asp-validation-for="WarehouseId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Description"></label>
+                            </div>
+                            <div class="col-6">
+                                <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="InvoiceProducts"></label>
+                            </div>
+                            <div class="col-6">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col" class="text-right" width="70%">الماده</th>
+                                            <th scope="col" class="text-right">العدد</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoiceProductsContainer">
+                                        @foreach (var invoiceProduct in Model.InvoiceProducts)
+                                        {
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>
+                                                    <select name="InvoiceProducts[@index].ProductId" class="form-control rtlSelect2">
+                                                        <option value="@invoiceProduct.ProductId" selected="selected">@(invoiceProduct.Product.Name)</option> 
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" required name="InvoiceProducts[@index].Count" value="@invoiceProduct.Count" class="form-control" />
+                                                </td>
+                                            </tr>
+
+                                             index++;
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <div class="row">
+                                    <div class="btn-toolbar" style="padding-left: 15px">
+                                        <button id="addInvoiceProductBtn" class="btn" type="button" value="add new">
+                                            <i class="material-icons">add</i>
+                                        </button>
+                                        <button id="removeInvoiceProductBtn" class="btn" type="button" value="remove">
+                                            <i class="material-icons">remove</i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group text-left">
+                            <input type="submit" class="btn btn-info" asp-route-id="@Model.Id" value="تحديث" />
+                            <a asp-action="Index" class="btn btn-default">العوده الى القائمة</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts
+    {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+
+    <script>
+        var index = @(index);
+        $("#addInvoiceProductBtn").bind("click", function () {
+            $("#invoiceProductsContainer").append(GetDynamicTextBox());
+            initializeSelect("#invoiceProductSelect" + index)
+        });
+
+        $("#removeInvoiceProductBtn").bind("click", function () {
+            --index;
+            $('.invoiceProductRow').last().remove();
+        });
+
+        $('.rtlSelect2').each(function(index, element) {
+            $(this).select2({
+                placeholder: "Select Product",
+                allowClear: true,
+                dir: "rtl",
+                ajax: {
+                    url: "/Invoices/Incoming/Search",
+                    contentType: "application/json; charset=utf-8",
+                    data: function (params) {
+                        var query =
+                        {
+                            term: params.term,
+                        };
+                        return query;
+                    },
+
+                    processResults: function (result) {
+                        return {
+                            results: $.map(result, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            }),
+                        };
+                    }
+                }
+            });
+        });
+
+        function GetDynamicTextBox() {
+            var i = index + 1;
+
+            return '<tr class="invoiceProductRow">' +
+                '<th scope="row">' + i + '</th>' +
+                '<td><select id="invoiceProductSelect' + index + '" name="InvoiceProducts[' + index + '].ProductId" class="form-control rtlSelect2"></select></td> ' +
+                '<td><input type="number" required name="InvoiceProducts[' + index + '].Count" class="form-control" /></td>' +
+                '</tr>';
+        }
+
+        function initializeSelect(id) {
+            $(id).select2({
+                placeholder: "Select Product",
+                allowClear: true,
+                dir: "rtl",
+                ajax: {
+                    url: "/Invoices/Incoming/Search",
+                    contentType: "application/json; charset=utf-8",
+                    data: function (params) {
+                        var query =
+                        {
+                            term: params.term,
+                        };
+                        return query;
+                    },
+
+                    processResults: function (result) {
+                        return {
+                            results: $.map(result, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            }),
+                        };
+                    }
+                }
+            });
+        }
+    </script>
+}
+

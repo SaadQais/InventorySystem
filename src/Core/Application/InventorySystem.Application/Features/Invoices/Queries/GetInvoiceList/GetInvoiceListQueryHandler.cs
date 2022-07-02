@@ -22,6 +22,7 @@ namespace InventorySystem.Application.Features.Invoices.Queries.GetInvoicesList
         {
             return await _repository
                 .GetAll()
+                .Where(i => i.Type == request.InvoiceType)
                 .ProjectTo<InvoiceViewModel>(_mapper.ConfigurationProvider)
                 .ToPagedListAsync(request.PageNumber, request.PageSize);
         }

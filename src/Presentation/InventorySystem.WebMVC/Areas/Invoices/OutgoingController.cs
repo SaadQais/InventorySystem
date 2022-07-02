@@ -17,12 +17,12 @@ namespace InventorySystem.WebMVC.Areas.Invoices
 {
     [Authorize]
     [Area("Invoices")]
-    public class IncomingController : Controller
+    public class OutgoingController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
 
-        public IncomingController(IWebHostEnvironment hostEnvironment, IMediator mediator)
+        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
@@ -31,11 +31,11 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         [HttpGet]
         public async Task<IActionResult> Index(InvoiceSearchModel search, int page = 1, int pageSize = 20)
         {
-            ViewBag.Current = "IncomingInvoices";
+            ViewBag.Current = "OutgoingInvoices";
 
             ViewData["SearchVM"] = search;
 
-            var Invoices = await _mediator.Send(new GetInvoiceListQuery(page, pageSize, Domain.Enums.InvoiceType.Incoming));
+            var Invoices = await _mediator.Send(new GetInvoiceListQuery(page, pageSize, Domain.Enums.InvoiceType.Outgoing));
 
             return View(Invoices);
         }
@@ -73,7 +73,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         {
             if (ModelState.IsValid)
             {
-                invoice.Type = Domain.Enums.InvoiceType.Incoming;
+                invoice.Type = Domain.Enums.InvoiceType.Outgoing;
                 await _mediator.Send(invoice);
                 return RedirectToAction(nameof(Index));
             }
@@ -117,7 +117,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
             {
                 try
                 {
-                    invoice.Type = Domain.Enums.InvoiceType.Incoming;
+                    invoice.Type = Domain.Enums.InvoiceType.Outgoing;
                     await _mediator.Send(invoice);
                 }
                 catch (DbUpdateConcurrencyException)

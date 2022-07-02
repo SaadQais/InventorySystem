@@ -87,9 +87,8 @@
                                 <p>المواد</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#pagesExamples" class="nav-link collapsed" aria-expanded="false">
-                                
+                        <li class="nav-item @(ViewBag.Current == "IncomingInvoices" ? "active" : "")">
+                            <a data-toggle="collapse" href="#incomingPage" class="nav-link collapsed" aria-expanded="false">
                                 <div class="row">
 
                                     <div class="col-8">
@@ -104,10 +103,43 @@
                                     </div>
                                 </div>
                             </a>
-                            <div class="collapse" id="pagesExamples" aria-expanded="false" style="height: 0px;">
+                            <div class="collapse" id="incomingPage" aria-expanded="false" style="height: 0px;">
                                 <ul class="nav">
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="Invoices" asp-controller="Incoming" asp-action="Index">
+                                            <i class="material-icons">receipt</i>
+                                            <p>وصولات</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="pages/timeline.html">
+                                            <i class="material-icons">input</i>
+                                            <p>ادخال مباشر</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item @(ViewBag.Current == "OutgoingInvoices" ? "active" : "")">
+                            <a data-toggle="collapse" href="#outgoingPage" class="nav-link collapsed" aria-expanded="false">
+                                <div class="row">
+
+                                    <div class="col-8">
+                                        <i class="material-icons">outbox</i>
+
+                                        <p>
+                                            طلبات الأخراج
+                                        </p>
+                                    </div>
+                                    <div class="col-4">
+                                        <b class="caret"></b>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="collapse" id="outgoingPage" aria-expanded="false" style="height: 0px;">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="Invoices" asp-controller="Outgoing" asp-action="Index">
                                             <i class="material-icons">receipt</i>
                                             <p>وصولات</p>
                                         </a>

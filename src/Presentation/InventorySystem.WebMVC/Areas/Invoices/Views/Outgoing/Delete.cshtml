@@ -1,0 +1,80 @@
+﻿@model InvoiceViewModel
+@using InventorySystem.Application.Features.Invoices.Models;
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <h3 class="card-title ">حذف الوصل</h3>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <br />
+            <div class="card-body">
+                <form method="post" asp-action="Delete">
+                    <div class="p-4  border rounded">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Number"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Number" disabled class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Type"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Type" disabled class="form-control" />
+                            </div>
+                        </div>
+
+						<div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Supplier"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Supplier" disabled class="form-control" />
+                            </div>
+                        </div>
+
+						<div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Warehouse.Name"></label>
+                            </div>
+                            <div class="col-6">
+                                <input asp-for="Warehouse.Name" disabled class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-3 text-right">
+                                <label asp-for="Description"></label>
+                            </div>
+                            <div class="col-6">
+                                <textarea asp-for="Description" rows="3" disabled class="form-control"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <input type="submit" class="btn btn-danger" value="حذف" />
+                            <a asp-action="Index" class="btn btn-default">العوده الى القائمة</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+

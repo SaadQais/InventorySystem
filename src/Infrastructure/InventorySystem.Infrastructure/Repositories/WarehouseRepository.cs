@@ -1,6 +1,7 @@
 ﻿using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Domain.Entities.Invoices;
 using InventorySystem.Domain.Entities.Warehouses;
+using InventorySystem.Domain.Enums;
 using InventorySystem.Domain.Repositories;
 using InventorySystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -26,18 +27,32 @@ namespace InventorySystem.Infrastructure.Repositories
                     var warehouseProduct = warehouse.WarehouseProducts
                         .FirstOrDefault(wp => wp.ProductId == invoiceProduct.ProductId);
 
-                    if (warehouseProduct != null)
-                        warehouseProduct.Count += invoiceProduct.Count;
+                    if(invoice.Type == InvoiceType.Incoming)
+                    {
+                        if (warehouseProduct != null)
+                            warehouseProduct.Count += invoiceProduct.Count;
+                        else
+                        {
+                            warehouse.WarehouseProducts.Add(new WarehouseProduct
+                            {
+                                ProductId = invoiceProduct.ProductId,
+                                Count = invoiceProduct.Count,
+                            });
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
                     else
                     {
-                        warehouse.WarehouseProducts.Add(new WarehouseProduct
-                        {
-                            ProductId = invoiceProduct.ProductId,
-                            Count = invoiceProduct.Count,
-                        });
+                        if (warehouseProduct != null)
+                            if (invoiceProduct.Count - warehouseProduct.Count < 0)
+                                throw new IndexOutOfRangeException("Warehouse does not have enough items");
+                            else
+                            {
+                                warehouseProduct.Count -= invoiceProduct.Count;
+                                await _context.SaveChangesAsync();
+                            }
                     }
-
-                    await _context.SaveChangesAsync();
                 }
             }
         }
@@ -57,7 +72,10 @@ namespace InventorySystem.Infrastructure.Repositories
 
                     if (warehouseProduct != null)
                     {
-                        warehouseProduct.Count -= invoiceProduct.Count;
+                        if(invoice.Type == InvoiceType.Incoming)
+                            warehouseProduct.Count -= invoiceProduct.Count;
+                        else
+                            warehouseProduct.Count += invoiceProduct.Count;
 
                         await _context.SaveChangesAsync();
                     }
