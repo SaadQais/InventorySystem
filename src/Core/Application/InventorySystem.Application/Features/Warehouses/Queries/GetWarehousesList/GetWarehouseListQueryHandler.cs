@@ -4,6 +4,7 @@ using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
 using InventorySystem.Domain.Entities.Warehouses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList

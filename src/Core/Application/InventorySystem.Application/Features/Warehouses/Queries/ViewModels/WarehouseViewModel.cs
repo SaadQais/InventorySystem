@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.ViewModels
 {
@@ -15,5 +14,7 @@ namespace InventorySystem.Application.Features.Warehouses.Queries.ViewModels
 
         [Display(Name = "الوصف")]
         public string Description { get; set; }
+
+        public IReadOnlyList<WarehouseProductViewModel> WarehouseProducts = new List<WarehouseProductViewModel>();
     }
 }

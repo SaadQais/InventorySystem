@@ -13,6 +13,7 @@ namespace InventorySystem.Application.Mappings
             CreateMap<Warehouse, WarehouseViewModel>().ReverseMap();
             CreateMap<Warehouse, CreateWarehouseCommand>().ReverseMap();
             CreateMap<Warehouse, UpdateWarehouseCommand>().ReverseMap();
+            CreateMap<WarehouseProduct, WarehouseProductViewModel>().ReverseMap();
         }
     }
 }

@@ -83,7 +83,7 @@
                                     <tbody id="invoiceProductsContainer">
                                         @foreach (var invoiceProduct in Model.InvoiceProducts)
                                         {
-                                            <tr>
+                                            <tr class="invoiceProductRow">
                                                 <th scope="row">1</th>
                                                 <td>
                                                     <select name="InvoiceProducts[@index].ProductId" class="form-control rtlSelect2">
@@ -117,7 +117,7 @@
                         <hr />
 
                         <div class="form-group text-left">
-                            <input type="submit" class="btn btn-info" asp-route-id="@Model.Id" value="تحديث" />
+                            <input type="submit" class="btn btn-primary" asp-route-id="@Model.Id" value="تحديث" />
                             <a asp-action="Index" class="btn btn-default">العوده الى القائمة</a>
                         </div>
                     </div>

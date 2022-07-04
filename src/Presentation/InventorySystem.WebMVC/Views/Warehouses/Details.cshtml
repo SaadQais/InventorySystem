@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Details";
+    int index = 0;
 }
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-12">
         <div class="card">
             <div class="card-header card-header-primary">
                 <div class="row">
@@ -57,9 +58,47 @@
 
                     </div>
 
-                    <div class="form-group">
-                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">تعديل</a>
-                        <a asp-action="Index" class="btn btn-danger">العوده الى القائمة</a>
+                    <br />
+
+                    <div class="card col-12">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h3 class="card-title ">المواد داخل المخزن</h3>
+                                </div>
+                            </div>
+                            <br />
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>@Html.DisplayNameFor(m => m.WarehouseProducts.FirstOrDefault().Product.Name)</th>
+                                        <th>@Html.DisplayNameFor(m => m.WarehouseProducts.FirstOrDefault().Count)</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @foreach (var item in Model.WarehouseProducts)
+                                    {
+                                        <tr>
+                                            <td>@(++index)</td>
+                                            <td>@Html.DisplayFor(m => item.Product.Name)</td>
+                                            <td>@Html.DisplayFor(m => item.Count)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="form-group text-left">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+                        <a asp-action="Index" class="btn btn-default">العوده الى القائمة</a>
                     </div>
                 </div>
             </div>
