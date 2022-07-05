@@ -6,9 +6,9 @@ using InventorySystem.Domain.Entities.Invoices;
 
 namespace InventorySystem.Application.Mappings
 {
-    public class InvoiceProfile : Profile
+    public class InvoicesProfile : Profile
     {
-        public InvoiceProfile()
+        public InvoicesProfile()
         {
             CreateMap<Invoice, InvoiceViewModel>().ReverseMap();
             CreateMap<Invoice, CreateInvoiceCommand>().ReverseMap();

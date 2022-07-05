@@ -1,4 +1,5 @@
 ﻿using InventorySystem.Domain.Common;
+using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace InventorySystem.Application.Contracts.Persistence
@@ -14,7 +15,7 @@ namespace InventorySystem.Application.Contracts.Persistence
             IOrderedQueryable<T>> orderBy = null, List<Expression<Func<T, object>>> includes = null, bool disableTracking = true);
 
         Task<T> GetByIdAsync(int id);
-        Task<T> GetByIdAsync(int id, List<Expression<Func<T, object>>> includes = null, bool disableTracking = false);
+        Task<T> GetByIdAsync(int id, List<Func<IQueryable<T>, IIncludableQueryable<T, object>>> includes = null, bool disableTracking = false);
 
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);

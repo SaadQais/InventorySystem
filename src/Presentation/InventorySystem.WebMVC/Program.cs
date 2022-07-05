@@ -29,6 +29,12 @@ app.MapAreaControllerRoute(
     pattern: "Invoices/{controller}/{action=Index}"
 );
 
+app.MapAreaControllerRoute(
+    name: "DirectEntries",
+    areaName: "DirectEntries",
+    pattern: "DirectEntries/{controller}/{action=Index}"
+);
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

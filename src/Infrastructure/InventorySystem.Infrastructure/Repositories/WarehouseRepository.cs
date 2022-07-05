@@ -1,4 +1,5 @@
 ﻿using InventorySystem.Application.Contracts.Persistence;
+using InventorySystem.Domain.Entities.DirectEntries;
 using InventorySystem.Domain.Entities.Invoices;
 using InventorySystem.Domain.Entities.Warehouses;
 using InventorySystem.Domain.Enums;
@@ -65,6 +66,49 @@ namespace InventorySystem.Infrastructure.Repositories
             }
         }
 
+        public async Task UpdateWhenCreateDirectEntryAsync(DirectEntry directEntry)
+        {
+            var warehouse = await _context.Warehouses
+                .Include(w => w.WarehouseProducts)
+                .FirstOrDefaultAsync(w => w.Id == directEntry.WarehouseId);
+
+            if (warehouse != null)
+            {
+                foreach (var directEntryProduct in directEntry.DirectEntryProducts)
+                {
+                    var warehouseProduct = warehouse.WarehouseProducts
+                        .FirstOrDefault(wp => wp.ProductId == directEntryProduct.ProductId);
+
+                    if (directEntry.Type == DirectEntryType.Incoming)
+                    {
+                        if (warehouseProduct != null)
+                            warehouseProduct.Count += directEntryProduct.Count;
+                        else
+                        {
+                            warehouse.WarehouseProducts.Add(new WarehouseProduct
+                            {
+                                ProductId = directEntryProduct.ProductId,
+                                Count = directEntryProduct.Count,
+                            });
+                        }
+
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        if (warehouseProduct != null)
+                            if (directEntryProduct.Count - warehouseProduct.Count < 0)
+                                throw new IndexOutOfRangeException("Warehouse does not have enough items");
+                            else
+                            {
+                                warehouseProduct.Count -= directEntryProduct.Count;
+                                await _context.SaveChangesAsync();
+                            }
+                    }
+                }
+            }
+        }
+
         public async Task UpdateWhenDeleteInvoiceAsync(Invoice invoice)
         {
             var warehouse = await _context.Warehouses
@@ -91,10 +135,42 @@ namespace InventorySystem.Infrastructure.Repositories
             }
         }
 
+        public async Task UpdateWhenDeleteDirectEntryAsync(DirectEntry directEntry)
+        {
+            var warehouse = await _context.Warehouses
+                .Include(w => w.WarehouseProducts)
+                .FirstOrDefaultAsync(w => w.Id == directEntry.WarehouseId);
+
+            if (warehouse != null)
+            {
+                foreach (var directEntryProduct in directEntry.DirectEntryProducts)
+                {
+                    var warehouseProduct = warehouse.WarehouseProducts
+                        .FirstOrDefault(wp => wp.ProductId == directEntryProduct.ProductId);
+
+                    if (warehouseProduct != null)
+                    {
+                        if (directEntry.Type == DirectEntryType.Incoming)
+                            warehouseProduct.Count -= directEntryProduct.Count;
+                        else
+                            warehouseProduct.Count += directEntryProduct.Count;
+
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+        }
+
         public async Task UpdateWhenUpdateInvoiceAsync(Invoice oldInvoice, Invoice newInvoice)
         {
             await UpdateWhenDeleteInvoiceAsync(oldInvoice);
             await UpdateWhenCreateInvoiceAsync(newInvoice);
+        }
+
+        public async Task UpdateWhenUpdateDirectEntryAsync(DirectEntry olddirectEntry, DirectEntry newdirectEntry)
+        {
+            await UpdateWhenDeleteDirectEntryAsync(olddirectEntry);
+            await UpdateWhenCreateDirectEntryAsync(newdirectEntry);
         }
     }
 }

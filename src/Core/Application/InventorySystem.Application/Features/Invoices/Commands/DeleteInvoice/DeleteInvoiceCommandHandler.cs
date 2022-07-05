@@ -2,6 +2,8 @@
 using InventorySystem.Application.Exceptions;
 using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
@@ -23,9 +25,9 @@ namespace InventorySystem.Application.Features.Invoices.Commands.DeleteInvoice
 
         public async Task<Unit> Handle(DeleteInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoiceToDelete = await _repository.GetByIdAsync(request.Id, new List<Expression<Func<Invoice, object>>>
+            var invoiceToDelete = await _repository.GetByIdAsync(request.Id, new List<Func<IQueryable<Invoice>, IIncludableQueryable<Invoice, object>>>
             {
-                i => i.InvoiceProducts
+                i => i.Include(e => e.InvoiceProducts)
             });
 
             if (invoiceToDelete == null)

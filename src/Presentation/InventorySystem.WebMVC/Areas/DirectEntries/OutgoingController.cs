@@ -1,9 +1,9 @@
-﻿using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
-using InventorySystem.Application.Features.Invoices.Commands.DeleteInvoice;
-using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
-using InventorySystem.Application.Features.Invoices.Models;
-using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
-using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesList;
+﻿using InventorySystem.Application.Features.DirectEntries.Commands.CreateDirectEntry;
+using InventorySystem.Application.Features.DirectEntries.Commands.DeleteDirectEntry;
+using InventorySystem.Application.Features.DirectEntries.Commands.UpdateDirectEntry;
+using InventorySystem.Application.Features.DirectEntries.Models;
+using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesById;
+using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesList;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
@@ -13,10 +13,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventorySystem.WebMVC.Areas.Invoices
+namespace InventorySystem.WebMVC.Areas.DirectEntries
 {
     [Authorize]
-    [Area("Invoices")]
+    [Area("DirectEntries")]
     public class OutgoingController : Controller
     {
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -29,15 +29,15 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(InvoiceSearchModel search, int page = 1, int pageSize = 20)
+        public async Task<IActionResult> Index(DirectEntrySearchModel search, int page = 1, int pageSize = 20)
         {
-            ViewBag.Current = "OutgoingInvoices";
+            ViewBag.Current = "OutgoingDirectEntries";
 
             ViewData["SearchVM"] = search;
 
-            var Invoices = await _mediator.Send(new GetInvoiceListQuery(page, pageSize, Domain.Enums.InvoiceType.Outgoing));
+            var directEntries = await _mediator.Send(new GetDirectEntryListQuery(page, pageSize, Domain.Enums.DirectEntryType.Outgoing));
 
-            return View(Invoices);
+            return View(directEntries);
         }
 
         [HttpGet]
@@ -48,14 +48,14 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return NotFound();
             }
 
-            var Invoice = await _mediator.Send(new GetInvoiceByIdQuery { Id = id.Value });
+            var directEntry = await _mediator.Send(new GetDirectEntryByIdQuery { Id = id.Value });
 
-            if (Invoice == null)
+            if (directEntry == null)
             {
                 return NotFound();
             }
 
-            return View(Invoice);
+            return View(directEntry);
         }
 
         [HttpGet]
@@ -69,19 +69,19 @@ namespace InventorySystem.WebMVC.Areas.Invoices
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateInvoiceCommand invoice)
+        public async Task<IActionResult> Create(CreateDirectEntryCommand directEntry)
         {
             if (ModelState.IsValid)
             {
-                invoice.Type = Domain.Enums.InvoiceType.Outgoing;
-                await _mediator.Send(invoice);
+                directEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
+                await _mediator.Send(directEntry);
                 return RedirectToAction(nameof(Index));
             }
 
             ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
             ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
 
-            return View(invoice);
+            return View(directEntry);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -91,24 +91,24 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return NotFound();
             }
 
-            var invoice = await _mediator.Send(new GetInvoiceByIdQuery { Id = id.Value });
+            var directEntry = await _mediator.Send(new GetDirectEntryByIdQuery { Id = id.Value });
 
-            if (invoice == null)
+            if (directEntry == null)
             {
                 return NotFound();
             }
 
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), 
-                "Id", "Name", invoice.Warehouse.Id);
+                "Id", "Name", directEntry.Warehouse.Id);
 
-            return View(invoice);
+            return View(directEntry);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateInvoiceCommand invoice)
+        public async Task<IActionResult> Edit(int id, UpdateDirectEntryCommand directEntry)
         {
-            if (id != invoice.Id)
+            if (id != directEntry.Id)
             {
                 return NotFound();
             }
@@ -117,8 +117,8 @@ namespace InventorySystem.WebMVC.Areas.Invoices
             {
                 try
                 {
-                    invoice.Type = Domain.Enums.InvoiceType.Outgoing;
-                    await _mediator.Send(invoice);
+                    directEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
+                    await _mediator.Send(directEntry);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -128,9 +128,9 @@ namespace InventorySystem.WebMVC.Areas.Invoices
             }
 
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)),
-               "Id", "Name", invoice.WarehouseId);
+               "Id", "Name", directEntry.WarehouseId);
 
-            return View(invoice);
+            return View(directEntry);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -140,22 +140,33 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return NotFound();
             }
 
-            var invoice = await _mediator.Send(new GetInvoiceByIdQuery { Id = id.Value });
+            var directEntry = await _mediator.Send(new GetDirectEntryByIdQuery { Id = id.Value });
 
-            if (invoice == null)
+            if (directEntry == null)
             {
                 return NotFound();
             }
 
-            return View(invoice);
+            return View(directEntry);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _mediator.Send(new DeleteInvoiceCommand { Id = id });
+            await _mediator.Send(new DeleteDirectEntryCommand { Id = id });
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string term)
+        {
+            var products = await _mediator.Send(new GetProductListQuery(1, int.MaxValue));
+
+            var data = products.Where(a => a.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
+                .ToList().AsReadOnly();
+
+            return Ok(data);
         }
     }
 }

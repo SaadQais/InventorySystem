@@ -3,6 +3,8 @@ using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Exceptions;
 using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
@@ -26,9 +28,9 @@ namespace InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice
         
         public async Task<Unit> Handle(UpdateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var invoiceToUpdate = await _repository.GetByIdAsync(request.Id, new List<Expression<Func<Invoice, object>>>
+            var invoiceToUpdate = await _repository.GetByIdAsync(request.Id, new List<Func<IQueryable<Invoice>, IIncludableQueryable<Invoice, object>>>
             {
-                i => i.InvoiceProducts
+                i => i.Include(e => e.InvoiceProducts)
             });
 
             if (invoiceToUpdate == null)

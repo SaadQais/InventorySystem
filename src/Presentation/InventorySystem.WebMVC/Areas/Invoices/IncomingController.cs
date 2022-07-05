@@ -157,16 +157,5 @@ namespace InventorySystem.WebMVC.Areas.Invoices
             await _mediator.Send(new DeleteInvoiceCommand { Id = id });
             return RedirectToAction(nameof(Index));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Search(string term)
-        {
-            var products = await _mediator.Send(new GetProductListQuery(1, int.MaxValue));
-
-            var data = products.Where(a => a.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
-                .ToList().AsReadOnly();
-
-            return Ok(data);
-        }
     }
 }

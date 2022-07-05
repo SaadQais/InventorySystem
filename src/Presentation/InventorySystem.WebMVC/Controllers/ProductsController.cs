@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace InventorySystem.WebMVC.Controllers
 {
@@ -136,6 +137,20 @@ namespace InventorySystem.WebMVC.Controllers
         {
             await _mediator.Send(new DeleteProductCommand { Id = id });
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Search(string term)
+        {
+            IReadOnlyCollection<ProductViewModel> data = new List<ProductViewModel>();
+
+            data = await _mediator.Send(new GetProductListQuery(1, int.MaxValue));
+
+            if (!string.IsNullOrEmpty(term))
+                data = data.Where(a => a.Name.Contains(term, StringComparison.OrdinalIgnoreCase))
+                    .ToList().AsReadOnly();
+
+            return Ok(data);
         }
     }
 }
