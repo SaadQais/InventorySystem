@@ -97,7 +97,7 @@ namespace InventorySystem.Infrastructure.Repositories
                     else
                     {
                         if (warehouseProduct != null)
-                            if (directEntryProduct.Count - warehouseProduct.Count < 0)
+                            if ((warehouseProduct.Count - directEntryProduct.Count) < 0)
                                 throw new IndexOutOfRangeException("Warehouse does not have enough items");
                             else
                             {

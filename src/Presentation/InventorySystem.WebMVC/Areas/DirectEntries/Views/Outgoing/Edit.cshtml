@@ -1,5 +1,5 @@
 ﻿@using InventorySystem.Domain.Enums
-@model InventorySystem.Application.Features.Invoices.Models.InvoiceViewModel
+@model InventorySystem.Application.Features.DirectEntries.Models.DirectEntryViewModel
 @{
     ViewData["Title"] = "Edit";
     int index = 0;
@@ -11,7 +11,7 @@
             <div class="card-header card-header-primary">
                 <div class="row">
                     <div class="col-12 text-right">
-                        <h3 class="card-title ">تعديل معلومات الوصل</h3>
+                        <h3 class="card-title ">تعديل معلومات الأخراج المباشر</h3>
                     </div>
                 </div>
                 <br />
@@ -22,26 +22,6 @@
                     <div class="p-4 border rounded">
                         <input type="hidden" asp-for="Id" />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="Number"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="Number" class="form-control" />
-                            </div>
-                            <span asp-validation-for="Number" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-3 text-right">
-                                <label asp-for="Supplier"></label>
-                            </div>
-                            <div class="col-6">
-                                <input asp-for="Supplier" class="form-control" />
-                            </div>
-                            <span asp-validation-for="Supplier" class="text-danger"></span>
-                        </div>
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
@@ -68,7 +48,7 @@
 
                         <div class="form-group row">
                             <div class="col-3 text-right">
-                                <label asp-for="InvoiceProducts"></label>
+                                <label asp-for="DirectEntryProducts"></label>
                             </div>
                             <div class="col-6">
 
@@ -80,18 +60,18 @@
                                             <th scope="col" class="text-right">العدد</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="invoiceProductsContainer">
-                                        @foreach (var invoiceProduct in Model.InvoiceProducts)
+                                    <tbody id="directEntryProductsContainer">
+                                        @foreach (var directEntryProduct in Model.DirectEntryProducts)
                                         {
-                                            <tr class="invoiceProductRow">
+                                            <tr class="directEntryProductRow">
                                                 <th scope="row">1</th>
                                                 <td>
-                                                    <select name="InvoiceProducts[@index].ProductId" class="form-control rtlSelect2">
-                                                        <option value="@invoiceProduct.ProductId" selected="selected">@(invoiceProduct.Product.Name)</option> 
+                                                    <select name="DirectEntryProducts[@index].ProductId" class="form-control rtlSelect2">
+                                                        <option value="@directEntryProduct.ProductId" selected="selected">@(directEntryProduct.Product.Name)</option> 
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" required name="InvoiceProducts[@index].Count" value="@invoiceProduct.Count" class="form-control" />
+                                                    <input type="number" required name="DirectEntryProducts[@index].Count" value="@directEntryProduct.Count" class="form-control" />
                                                 </td>
                                             </tr>
 
@@ -102,10 +82,10 @@
 
                                 <div class="row">
                                     <div class="btn-toolbar" style="padding-left: 15px">
-                                        <button id="addInvoiceProductBtn" class="btn" type="button" value="add new">
+                                        <button id="adddirectEntryProductBtn" class="btn" type="button" value="add new">
                                             <i class="material-icons">add</i>
                                         </button>
-                                        <button id="removeInvoiceProductBtn" class="btn" type="button" value="remove">
+                                        <button id="removedirectEntryProductBtn" class="btn" type="button" value="remove">
                                             <i class="material-icons">remove</i>
                                         </button>
                                     </div>
@@ -137,14 +117,14 @@
 
     <script>
         var index = @(index);
-        $("#addInvoiceProductBtn").bind("click", function () {
-            $("#invoiceProductsContainer").append(GetDynamicTextBox());
-            initializeSelect("#invoiceProductSelect" + index)
+        $("#adddirectEntryProductBtn").bind("click", function () {
+            $("#directEntryProductsContainer").append(GetDynamicTextBox());
+            initializeSelect("#directEntryProductSelect" + index)
         });
 
-        $("#removeInvoiceProductBtn").bind("click", function () {
+        $("#removedirectEntryProductBtn").bind("click", function () {
             --index;
-            $('.invoiceProductRow').last().remove();
+            $('.directEntryProductRow').last().remove();
         });
 
         $('.rtlSelect2').each(function(index, element) {
@@ -153,7 +133,7 @@
                 allowClear: true,
                 dir: "rtl",
                 ajax: {
-                    url: "/Invoices/Incoming/Search",
+                    url: "/Products/Search",
                     contentType: "application/json; charset=utf-8",
                     data: function (params) {
                         var query =
@@ -180,10 +160,10 @@
         function GetDynamicTextBox() {
             var i = index + 1;
 
-            return '<tr class="invoiceProductRow">' +
+            return '<tr class="directEntryProductRow">' +
                 '<th scope="row">' + i + '</th>' +
-                '<td><select id="invoiceProductSelect' + index + '" name="InvoiceProducts[' + index + '].ProductId" class="form-control rtlSelect2"></select></td> ' +
-                '<td><input type="number" required name="InvoiceProducts[' + index + '].Count" class="form-control" /></td>' +
+                '<td><select id="directEntryProductSelect' + index + '" name="directEntryProducts[' + index + '].ProductId" class="form-control rtlSelect2"></select></td> ' +
+                '<td><input type="number" required name="directEntryProducts[' + index + '].Count" class="form-control" /></td>' +
                 '</tr>';
         }
 
@@ -193,7 +173,7 @@
                 allowClear: true,
                 dir: "rtl",
                 ajax: {
-                    url: "/Invoices/Incoming/Search",
+                    url: "/Products/Search",
                     contentType: "application/json; charset=utf-8",
                     data: function (params) {
                         var query =
