@@ -15,14 +15,6 @@ namespace InventorySystem.Infrastructure.Repositories
         {
         }
 
-        public Task<Warehouse> GetCustomByIdAsync(int id, int pageNumber, int pageSize)
-        {
-            return _context.Warehouses
-                .Include(w => w.WarehouseProducts)
-                    .ThenInclude(wp => wp.Product)
-                .FirstOrDefaultAsync(w => w.Id == id);
-        }
-
         public async Task UpdateWhenCreateInvoiceAsync(Invoice invoice)
         {
             var warehouse = await _context.Warehouses

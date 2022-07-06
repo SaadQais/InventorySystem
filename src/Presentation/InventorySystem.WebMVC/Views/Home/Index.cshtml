@@ -2,7 +2,94 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <a asp-controller="Warehouses" asp-action="Index" style="color:inherit">
+                        <i class="material-icons">warehouse</i>
+                    </a>
+                </div>
+                <p class="card-category">مجموع المخازن</p>
+                <h3 class="card-title"> @ViewBag.WarehousesCount <small>مخزن</small></h3>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stats">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <a asp-controller="Products" asp-action="Index" style="color:inherit">
+                        <i class="material-icons">widgets</i>
+                    </a>
+                </div>
+                <p class="card-category">مجموع المواد</p>
+                <h3 class="card-title"> @ViewBag.ProductsCount <small>مادة</small></h3>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stats">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <a asp-area="Invoices" asp-controller="Incoming" asp-action="Index" style="color:inherit">
+                        <i class="material-icons">receipt</i>
+                    </a>
+                </div>
+                <p class="card-category">مجموع الوصولات الداخله</p>
+                <h3 class="card-title"> @ViewBag.InvoicesCount.IncomingCount <small>وصل</small></h3>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stats">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <a asp-area="Invoices" asp-controller="Outgoing" asp-action="Index" style="color:inherit">
+                        <i class="material-icons">receipt</i>
+                    </a>
+                </div>
+                <p class="card-category">مجموع الوصولات الحارجه</p>
+                <h3 class="card-title"> @ViewBag.InvoicesCount.OutgoingCount <small>وصل</small></h3>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stats">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

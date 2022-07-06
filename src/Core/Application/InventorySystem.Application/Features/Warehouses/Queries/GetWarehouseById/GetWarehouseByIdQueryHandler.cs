@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
+using InventorySystem.Domain.Entities.Warehouses;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesById
 {
@@ -18,7 +21,10 @@ namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesB
         
         public async Task<WarehouseViewModel> Handle(GetWarehouseByIdQuery request, CancellationToken cancellationToken)
         {
-            return _mapper.Map<WarehouseViewModel>(await _repository.GetCustomByIdAsync(request.Id, 1, 20));
+            return _mapper.Map<WarehouseViewModel>(await _repository.GetByIdAsync(request.Id, new List<Func<IQueryable<Warehouse>, IIncludableQueryable<Domain.Entities.Warehouses.Warehouse, object>>>
+            {
+                d => d.Include(w => w.WarehouseProducts).ThenInclude(wp => wp.Product)
+            }));
         }
     }
 }
