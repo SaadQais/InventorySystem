@@ -17,6 +17,8 @@ namespace InventorySystem.Application.Contracts.Persistence
         Task<T> GetByIdAsync(int id);
         Task<T> GetByIdAsync(int id, List<Func<IQueryable<T>, IIncludableQueryable<T, object>>> includes = null, bool disableTracking = false);
 
+        Task<int> GetCountAsync();
+
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);

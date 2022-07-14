@@ -12,5 +12,6 @@ namespace InventorySystem.Application.Contracts.Persistence
         Task UpdateWhenDeleteDirectEntryAsync(DirectEntry directEntry);
         Task UpdateWhenUpdateInvoiceAsync(Invoice oldInvoice, Invoice newInvoice);
         Task UpdateWhenUpdateDirectEntryAsync(DirectEntry olddirectEntry, DirectEntry newdirectEntry);
+        Task<int> ProductCountAsync(int warehouseId, int productId);
     }
 }

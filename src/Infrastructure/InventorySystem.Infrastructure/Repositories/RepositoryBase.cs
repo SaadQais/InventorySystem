@@ -4,7 +4,6 @@ using InventorySystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace InventorySystem.Domain.Repositories
 {
@@ -74,6 +73,11 @@ namespace InventorySystem.Domain.Repositories
             if (disableTracking) entity = entity.AsNoTracking();
 
             return await entity.FirstOrDefaultAsync(i => i.Id == id);
+        }
+
+        public async Task<int> GetCountAsync()
+        {
+            return await _context.Set<T>().CountAsync();
         }
 
         public async Task<T> AddAsync(T entity)

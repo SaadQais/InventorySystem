@@ -164,5 +164,11 @@ namespace InventorySystem.Infrastructure.Repositories
             await UpdateWhenDeleteDirectEntryAsync(olddirectEntry);
             await UpdateWhenCreateDirectEntryAsync(newdirectEntry);
         }
+
+        public async Task<int> ProductCountAsync(int warehouseId, int productId)
+        {
+            return await _context.WarehouseProducts
+                .CountAsync(wp => wp.WarehouseId == warehouseId && wp.ProductId == productId);
+        }
     }
 }

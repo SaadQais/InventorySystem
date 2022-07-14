@@ -4,6 +4,7 @@ using InventorySystem.IoC;
 var builder = WebApplication.CreateBuilder(args);
 
 DependencyContainer.RegisterServices(builder.Services, builder.Configuration);
+builder.Services.AddApplicationServices();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

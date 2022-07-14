@@ -1,4 +1,6 @@
-﻿using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.DeleteInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
 using InventorySystem.Application.Features.Invoices.Models;
@@ -12,6 +14,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace InventorySystem.WebMVC.Areas.Invoices
 {
@@ -21,11 +25,13 @@ namespace InventorySystem.WebMVC.Areas.Invoices
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
+        private readonly IValidator<CreateInvoiceCommand> _validator;
 
-        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator)
+        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IValidator<CreateInvoiceCommand> validator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
+            _validator = validator;
         }
 
         [HttpGet]
@@ -71,17 +77,22 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateInvoiceCommand invoice)
         {
-            if (ModelState.IsValid)
+            ValidationResult result = await _validator.ValidateAsync(invoice);
+
+            if (!result.IsValid)
             {
-                invoice.Type = Domain.Enums.InvoiceType.Outgoing;
-                await _mediator.Send(invoice);
-                return RedirectToAction(nameof(Index));
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
+
+                ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
+                ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                return View(invoice);
             }
 
-            ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
-            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
-
-            return View(invoice);
+            invoice.Type = Domain.Enums.InvoiceType.Outgoing;
+            await _mediator.Send(invoice);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int? id)
