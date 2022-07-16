@@ -1,12 +1,16 @@
-﻿using InventorySystem.Application.Features.DirectEntries.Commands.CreateDirectEntry;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using InventorySystem.Application.Features.DirectEntries.Commands.CreateDirectEntry;
 using InventorySystem.Application.Features.DirectEntries.Commands.DeleteDirectEntry;
 using InventorySystem.Application.Features.DirectEntries.Commands.UpdateDirectEntry;
 using InventorySystem.Application.Features.DirectEntries.Models;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesById;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesList;
+using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
+using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +25,13 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
+        private readonly IValidator<CreateDirectEntryCommand> _createValidator;
 
-        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator)
+        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IValidator<CreateDirectEntryCommand> createValidator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
+            _createValidator = createValidator;
         }
 
         [HttpGet]
@@ -71,17 +77,23 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateDirectEntryCommand directEntry)
         {
-            if (ModelState.IsValid)
+            ValidationResult result = await _createValidator.ValidateAsync(directEntry);
+
+            if (!result.IsValid)
             {
-                directEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
-                await _mediator.Send(directEntry);
-                return RedirectToAction(nameof(Index));
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
+
+                ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
+                ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                return View(directEntry);
             }
 
-            ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
-            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+            directEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
+            await _mediator.Send(directEntry);
 
-            return View(directEntry);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int? id)
