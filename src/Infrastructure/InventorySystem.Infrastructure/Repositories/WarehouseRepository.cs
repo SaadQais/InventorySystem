@@ -46,13 +46,10 @@ namespace InventorySystem.Infrastructure.Repositories
                     else
                     {
                         if (warehouseProduct != null)
-                            if (invoiceProduct.Count - warehouseProduct.Count < 0)
-                                throw new IndexOutOfRangeException("Warehouse does not have enough items");
-                            else
-                            {
-                                warehouseProduct.Count -= invoiceProduct.Count;
-                                await _context.SaveChangesAsync();
-                            }
+                        {
+                            warehouseProduct.Count -= invoiceProduct.Count;
+                            await _context.SaveChangesAsync();
+                        }
                     }
                 }
             }
@@ -168,7 +165,9 @@ namespace InventorySystem.Infrastructure.Repositories
         public async Task<int> ProductCountAsync(int warehouseId, int productId)
         {
             return await _context.WarehouseProducts
-                .CountAsync(wp => wp.WarehouseId == warehouseId && wp.ProductId == productId);
+                .Where(wp => wp.ProductId == productId)
+                .Where(wp => wp.WarehouseId == warehouseId)
+                .SumAsync(wp => wp.Count);
         }
     }
 }

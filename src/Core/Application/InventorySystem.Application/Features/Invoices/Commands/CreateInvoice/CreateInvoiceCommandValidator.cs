@@ -25,7 +25,12 @@ namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
         private async Task<bool> CheckProductCountAvailablityAsync(CreateInvoiceCommand invoice, InvoiceProductModel invoiceProduct, 
             CancellationToken cancellationToken)
         {
-            if((await _warehouseRepository.ProductCountAsync(invoice.WarehouseId, invoiceProduct.ProductId)) >= invoiceProduct.Count)
+            if (invoice.Type == Domain.Enums.InvoiceType.Incoming)
+                return true;
+
+            int availableCount = await _warehouseRepository.ProductCountAsync(invoice.WarehouseId, invoiceProduct.ProductId);
+
+            if (availableCount >= invoiceProduct.Count)
                 return true;
 
             return false;

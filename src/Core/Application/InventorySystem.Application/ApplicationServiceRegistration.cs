@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
 using InventorySystem.Application.Behaviours;
-using InventorySystem.Application.Contracts.Infrastructure;
-using InventorySystem.Application.Contracts.Persistence;
-using InventorySystem.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

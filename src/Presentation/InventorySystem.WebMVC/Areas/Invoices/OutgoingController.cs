@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
 using InventorySystem.Application.Features.Invoices.Commands.DeleteInvoice;
@@ -25,13 +26,16 @@ namespace InventorySystem.WebMVC.Areas.Invoices
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
-        private readonly IValidator<CreateInvoiceCommand> _validator;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreateInvoiceCommand> _createValidator;
 
-        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IValidator<CreateInvoiceCommand> validator)
+        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IMapper mapper, 
+            IValidator<CreateInvoiceCommand> createValidator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
-            _validator = validator;
+            _mapper = mapper;
+            _createValidator = createValidator;
         }
 
         [HttpGet]
@@ -77,7 +81,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateInvoiceCommand invoice)
         {
-            ValidationResult result = await _validator.ValidateAsync(invoice);
+            ValidationResult result = await _createValidator.ValidateAsync(invoice);
 
             if (!result.IsValid)
             {
@@ -109,39 +113,56 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return NotFound();
             }
 
-            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), 
-                "Id", "Name", invoice.Warehouse.Id);
+            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), "Id", "Name", 
+                invoice.Warehouse.Id);
+            ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
 
             return View(invoice);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateInvoiceCommand invoice)
+        public async Task<IActionResult> Edit(int id, InvoiceViewModel invoice)
         {
             if (id != invoice.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var updateInvoice = _mapper.Map<CreateInvoiceCommand>(invoice);
+
+            ValidationResult result = await _createValidator.ValidateAsync(updateInvoice);
+
+            if (!result.IsValid)
             {
-                try
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
+
+                invoice = await _mediator.Send(new GetInvoiceByIdQuery { Id = id });
+
+                if (invoice == null)
                 {
-                    invoice.Type = Domain.Enums.InvoiceType.Outgoing;
-                    await _mediator.Send(invoice);
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+
+                ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), "Id", "Name",
+                    invoice.Warehouse.Id);
+                ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                return View(invoice);
             }
 
-            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)),
-               "Id", "Name", invoice.WarehouseId);
+            try
+            {
+                invoice.Type = Domain.Enums.InvoiceType.Outgoing;
+                await _mediator.Send(updateInvoice);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
 
-            return View(invoice);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int? id)
