@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using InventorySystem.Application.Features.DirectEntries.Commands.CreateDirectEntry;
 using InventorySystem.Application.Features.DirectEntries.Commands.DeleteDirectEntry;
@@ -6,11 +7,11 @@ using InventorySystem.Application.Features.DirectEntries.Commands.UpdateDirectEn
 using InventorySystem.Application.Features.DirectEntries.Models;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesById;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesList;
-using InventorySystem.Application.Features.Invoices.Commands.CreateInvoice;
+using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
+using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
-using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,13 +26,18 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
     {
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
         private readonly IValidator<CreateDirectEntryCommand> _createValidator;
+        private readonly IValidator<UpdateDirectEntryCommand> _updateValidator;
 
-        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IValidator<CreateDirectEntryCommand> createValidator)
+        public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IMapper mapper,
+            IValidator<CreateDirectEntryCommand> createValidator, IValidator<UpdateDirectEntryCommand> updateValidator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
+            _mapper = mapper;
             _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -118,31 +124,47 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, UpdateDirectEntryCommand directEntry)
+        public async Task<IActionResult> Edit(int id, DirectEntryViewModel directEntry)
         {
             if (id != directEntry.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            var updateDirectEntry = _mapper.Map<UpdateDirectEntryCommand>(directEntry);
+
+            ValidationResult result = await _updateValidator.ValidateAsync(updateDirectEntry);
+
+            if (!result.IsValid)
             {
-                try
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
+
+                directEntry = await _mediator.Send(new GetDirectEntryByIdQuery { Id = id });
+
+                if (directEntry == null)
                 {
-                    directEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
-                    await _mediator.Send(directEntry);
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-                return RedirectToAction(nameof(Index));
+
+                ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)), "Id", "Name",
+                    directEntry.WarehouseId);
+                ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                return View(directEntry);
             }
 
-            ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, 20)),
-               "Id", "Name", directEntry.WarehouseId);
+            try
+            {
+                updateDirectEntry.Type = Domain.Enums.DirectEntryType.Outgoing;
+                await _mediator.Send(updateDirectEntry);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
 
-            return View(directEntry);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(int? id)

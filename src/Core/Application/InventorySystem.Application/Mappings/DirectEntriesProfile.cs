@@ -13,6 +13,7 @@ namespace InventorySystem.Application.Mappings
             CreateMap<DirectEntry, DirectEntryViewModel>().ReverseMap();
             CreateMap<DirectEntry, CreateDirectEntryCommand>().ReverseMap();
             CreateMap<DirectEntry, UpdateDirectEntryCommand>().ReverseMap();
+            CreateMap<DirectEntryViewModel, UpdateDirectEntryCommand>().ReverseMap();
             CreateMap<DirectEntryProduct, DirectEntryProductModel>().ReverseMap();
         }
     }

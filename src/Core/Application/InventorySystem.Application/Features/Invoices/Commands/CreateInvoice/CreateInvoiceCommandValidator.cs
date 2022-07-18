@@ -13,9 +13,9 @@ namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
             _warehouseRepository = warehouseRepository;
 
             RuleFor(p => p.Number)
-                .NotEmpty().WithMessage("{Name} is required.")
+                .NotEmpty().WithMessage("{Number} is required.")
                 .NotNull()
-                .MaximumLength(50).WithMessage("{Name} must not exceed 50 characters.");
+                .MaximumLength(50).WithMessage("{Number} must not exceed 50 characters.");
 
             RuleForEach(invoice => invoice.InvoiceProducts)
                 .MustAsync(CheckProductCountAvailablityAsync)

@@ -28,14 +28,16 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
         private readonly IValidator<CreateInvoiceCommand> _createValidator;
+        private readonly IValidator<UpdateInvoiceCommand> _updateValidator;
 
         public OutgoingController(IWebHostEnvironment hostEnvironment, IMediator mediator, IMapper mapper, 
-            IValidator<CreateInvoiceCommand> createValidator)
+            IValidator<CreateInvoiceCommand> createValidator, IValidator<UpdateInvoiceCommand> updateValidator)
         {
             _hostEnvironment = hostEnvironment;
             _mediator = mediator;
             _mapper = mapper;
             _createValidator = createValidator;
+            _updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -129,9 +131,9 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 return NotFound();
             }
 
-            var updateInvoice = _mapper.Map<CreateInvoiceCommand>(invoice);
+            var updateInvoice = _mapper.Map<UpdateInvoiceCommand>(invoice);
 
-            ValidationResult result = await _createValidator.ValidateAsync(updateInvoice);
+            ValidationResult result = await _updateValidator.ValidateAsync(updateInvoice);
 
             if (!result.IsValid)
             {
@@ -154,7 +156,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
 
             try
             {
-                invoice.Type = Domain.Enums.InvoiceType.Outgoing;
+                updateInvoice.Type = Domain.Enums.InvoiceType.Outgoing;
                 await _mediator.Send(updateInvoice);
             }
             catch (DbUpdateConcurrencyException)
