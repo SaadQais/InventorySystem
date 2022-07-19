@@ -8,6 +8,6 @@ namespace InventorySystem.Application.Features.DirectEntries.Models
         public int DirectEntryId { get; set; }
         public int Count { get; set; }
 
-        public ProductViewModel Product { get; }
+        public ProductViewModel Product { get; set; }
     }
 }

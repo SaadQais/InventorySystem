@@ -7,11 +7,11 @@ using InventorySystem.Application.Features.DirectEntries.Commands.UpdateDirectEn
 using InventorySystem.Application.Features.DirectEntries.Models;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesById;
 using InventorySystem.Application.Features.DirectEntries.Queries.GetDirectEntriesList;
-using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
-using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
+using InventorySystem.Application.Features.Products.Queries.GetProductsById;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
+using InventorySystem.Domain.Entities.Invoices;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -71,7 +71,7 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)), "Id", "Name");
             ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
@@ -90,8 +90,11 @@ namespace InventorySystem.WebMVC.Areas.DirectEntries
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
 
-                ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
+                ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)), "Id", "Name");
                 ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                foreach (var directProduct in directEntry.DirectEntryProducts)
+                    directProduct.Product = await _mediator.Send(new GetProductByIdQuery { Id = directProduct.ProductId });
 
                 return View(directEntry);
             }

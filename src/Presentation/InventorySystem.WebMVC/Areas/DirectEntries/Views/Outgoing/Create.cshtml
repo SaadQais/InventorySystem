@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    int index = 0;
 }
 
 <div class="row">
@@ -60,16 +61,39 @@
                                         </tr>
                                     </thead>
                                     <tbody id="directEntryProductsContainer">
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>
-                                                <select id="directEntryProductSelect" name="directEntryProducts[0].ProductId" class="form-control rtlSelect2">
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="number" required name="directEntryProducts[0].Count" class="form-control" />
-                                            </td>
-                                        </tr>
+                                        @if(Model != null && Model.DirectEntryProducts.Count > 0)
+                                        @foreach (var directEntryProduct in Model.DirectEntryProducts)
+                                        {
+                                            <tr class="directEntryProductRow">
+                                                <th scope="row">1</th>
+                                                <td>
+                                                    <select name="DirectEntryProducts[@index].ProductId" class="form-control rtlSelect2">
+                                                        <option value="@directEntryProduct.ProductId" selected="selected">@(directEntryProduct.Product.Name)</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" required name="DirectEntryProducts[@index].Count" value="@directEntryProduct.Count" class="form-control" />
+                                                </td>
+                                            </tr>
+
+                                            index++;
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>
+                                                    <select id="directEntryProductSelect" name="directEntryProducts[0].ProductId" class="form-control rtlSelect2">
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" required name="directEntryProducts[0].Count" class="form-control" />
+                                                </td>
+                                            </tr>
+
+                                            index++;
+                                        }
+                                        
                                     </tbody>
                                 </table>
 
@@ -110,7 +134,7 @@
     <script src="~/lib/select2/js/select2.full.min.js"></script>
 
     <script>
-        var index = 0;
+        var index = @(index);
         $("#adddirectEntryProductBtn").bind("click", function () {
             $("#directEntryProductsContainer").append(GetDynamicTextBox());
             initializeSelect("#directEntryProductSelect" + index)
@@ -121,44 +145,44 @@
             $('.directEntryProductRow').last().remove();
         });
 
-        $("#directEntryProductSelect").select2({
-            placeholder: "Select Product",
-            allowClear: true,
-            dir: "rtl",
-            ajax: {
-                url: "/Products/Search",
-                contentType: "application/json; charset=utf-8",
-                data: function (params) {
-                    var query =
-                    {
-                        term: params.term,
-                    };
-                    return query;
-                },
+        $('.rtlSelect2').each(function (index, element) {
+            $(this).select2({
+                placeholder: "Select Product",
+                allowClear: true,
+                dir: "rtl",
+                ajax: {
+                    url: "/Products/Search",
+                    contentType: "application/json; charset=utf-8",
+                    data: function (params) {
+                        var query =
+                        {
+                            term: params.term,
+                        };
+                        return query;
+                    },
 
-                processResults: function (result) {
-                    return {
-                        results: $.map(result, function (item) {
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        }),
-                    };
+                    processResults: function (result) {
+                        return {
+                            results: $.map(result, function (item) {
+                                return {
+                                    id: item.id,
+                                    text: item.name
+                                };
+                            }),
+                        };
+                    }
                 }
-            }
+            });
         });
 
         function GetDynamicTextBox() {
-            ++index;
-
             var i = index + 1;
-           
+
             return '<tr class="directEntryProductRow">' +
                 '<th scope="row">' + i + '</th>' +
-                '<td><select id="directEntryProductSelect' + index +'" name="directEntryProducts[' + index +'].ProductId" class="form-control rtlSelect2"></select></td> ' +
+                '<td><select id="directEntryProductSelect' + index + '" name="directEntryProducts[' + index + '].ProductId" class="form-control rtlSelect2"></select></td> ' +
                 '<td><input type="number" required name="directEntryProducts[' + index + '].Count" class="form-control" /></td>' +
-            '</tr>';
+                '</tr>';
         }
 
         function initializeSelect(id) {

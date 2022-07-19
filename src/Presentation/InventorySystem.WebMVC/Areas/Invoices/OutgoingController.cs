@@ -7,6 +7,7 @@ using InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice;
 using InventorySystem.Application.Features.Invoices.Models;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesById;
 using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesList;
+using InventorySystem.Application.Features.Products.Queries.GetProductsById;
 using InventorySystem.Application.Features.Products.Queries.GetProductsList;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesList;
 using InventorySystem.Application.Models.Role;
@@ -71,7 +72,7 @@ namespace InventorySystem.WebMVC.Areas.Invoices
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
             ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)), "Id", "Name");
             ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
@@ -90,8 +91,11 @@ namespace InventorySystem.WebMVC.Areas.Invoices
                 foreach (var error in result.Errors)
                     ModelState.AddModelError(error.ErrorCode, error.ErrorMessage);
 
-                ViewData["WarehouseId"] = new SelectList(RolesVM.GetAll(), await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)));
+                ViewData["WarehouseId"] = new SelectList(await _mediator.Send(new GetWarehouseListQuery(1, int.MaxValue)), "Id", "Name");
                 ViewData["Products"] = new SelectList(await _mediator.Send(new GetProductListQuery(1, int.MaxValue)), "Id", "Name");
+
+                foreach (var invoiceProduct in invoice.InvoiceProducts)
+                    invoiceProduct.Product = await _mediator.Send(new GetProductByIdQuery { Id = invoiceProduct.ProductId });
 
                 return View(invoice);
             }
