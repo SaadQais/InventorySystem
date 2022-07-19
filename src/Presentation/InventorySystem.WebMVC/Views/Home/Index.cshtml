@@ -70,7 +70,6 @@
             </div>
         </div>
     </div>
-
     <div class="col-6">
         <div class="card card-stats">
             <div class="card-header card-header-danger card-header-icon">
@@ -93,3 +92,94 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-chart">
+            <div class="card-body py-2">
+                <div class="row">
+                <div class="col-4 my-auto">
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-info" style="height:5px;width:5px"></i>
+                    <h6><span class="text-dark text-xs">Product 1</span></h6>  
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-primary"></i>
+                    <h6><span class="text-dark text-xs">Product 2</span></h6>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-dark"></i>
+                    <h6><span class="text-dark text-xs">Product 3</span></h6>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-secondary"></i>
+                    <h6><span class="text-dark text-xs">Product 4</span></h6>
+                  </span>
+                </div>
+                    <div class="col-8 text-start">
+                  <div class="chart">
+                    <canvas id="chart" class="chart-canvas" height="300"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<script>
+    var chart = document.getElementById("chart").getContext("2d");
+    new Chart(chart, {
+      type: "pie",
+      data: {
+        labels: ['product1', 'product2', 'product3', 'product4'],
+        datasets: [{
+          label: "Product",
+          weight: 9,
+          cutout: 0,
+          tension: 0.9,
+          pointRadius: 2,
+          borderWidth: 2,
+          backgroundColor: ['#17c1e8', '#5e72e4', '#3A416F', '#a8b8d8'],
+          data: [24, 40, 12, 10],
+          fill: false
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: 'index',
+        },
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+            },
+            ticks: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              drawBorder: false,
+              display: false,
+              drawOnChartArea: false,
+              drawTicks: false,
+            },
+            ticks: {
+              display: false,
+            }
+          },
+        },
+      },
+    });
+
+</script>
