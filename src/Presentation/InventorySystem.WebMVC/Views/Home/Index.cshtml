@@ -134,8 +134,52 @@
             
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card card-chart">
+            <div class="card-header mb-0 pt-3 pb-1">
+                <h4>Warehouse1</h4>
+            </div>
+            <div class="card-body pb-0 pt-0">
+                <div class="row">
+                <div class="col-4 my-auto">
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-info" style="height:5px;width:5px"></i>
+                    <h6><span class="text-dark text-xs">Product 1</span></h6>  
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-primary"></i>
+                    <h6><span class="text-dark text-xs">Product 2</span></h6>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-dark"></i>
+                    <h6><span class="text-dark text-xs">Product 3</span></h6>
+                  </span>
+                  <span class="badge badge-md badge-dot me-4 d-block text-start">
+                    <i class="bg-secondary"></i>
+                    <h6><span class="text-dark text-xs">Product 4</span></h6>
+                  </span>
+                </div>
+                    <div class="col-8 text-start">
+                  <div class="chart">
+                    <canvas id="chart" class="chart-canvas" height="300"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body py-0">
+                <p>لوريم إيبسوم(Lorem Ipsum) هو ببساطة نص شكلي (بمعنى أن الغاية هي الشكل وليس المحتوى) ويُستخدم في صناعات المطاإيبسوم.</p>
+            </div>
+            <div class="card-footer pt-0">
+                <a href="#" class="btn btn-primary">الانتقال الى المخزن</a>    
+            </div>
+            
+        </div>
+    </div>
 </div>    
 <script>
+console.log(document.getElementsByClassName('card-chart'));
+let charts = document.getElementsByClassName('card-chart');
+for (let i = 0; i < charts.length; i++) {
     var chart = document.getElementById("chart").getContext("2d");
     new Chart(chart, {
       type: "pie",
@@ -191,5 +235,5 @@
         },
       },
     });
-
+    }
 </script>
