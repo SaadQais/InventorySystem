@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Features.Invoices.Models;
+using System.Linq;
 
 namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
 {
@@ -30,7 +31,11 @@ namespace InventorySystem.Application.Features.Invoices.Commands.CreateInvoice
 
             int availableCount = await _warehouseRepository.ProductCountAsync(invoice.WarehouseId, invoiceProduct.ProductId);
 
-            if (availableCount >= invoiceProduct.Count)
+            int invoiceProductCount = invoice.InvoiceProducts
+                .Where(i => i.ProductId == invoiceProduct.ProductId)
+                .Sum(i => i.Count);
+
+            if (availableCount >= invoiceProductCount)
                 return true;
 
             return false;

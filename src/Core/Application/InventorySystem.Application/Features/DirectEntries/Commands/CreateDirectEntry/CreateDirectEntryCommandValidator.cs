@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using InventorySystem.Application.Contracts.Persistence;
 using InventorySystem.Application.Features.DirectEntries.Models;
+using InventorySystem.Domain.Entities.Invoices;
 
 namespace InventorySystem.Application.Features.DirectEntries.Commands.CreateDirectEntry
 {
@@ -25,7 +26,11 @@ namespace InventorySystem.Application.Features.DirectEntries.Commands.CreateDire
 
             int availableCount = await _warehouseRepository.ProductCountAsync(directEntry.WarehouseId, directEntryProduct.ProductId);
 
-            if (availableCount >= directEntryProduct.Count)
+            int directEntryProductCount = directEntry.DirectEntryProducts
+                .Where(i => i.ProductId == directEntryProduct.ProductId)
+                .Sum(i => i.Count);
+
+            if (availableCount >= directEntryProductCount)
                 return true;
 
             return false;

@@ -19,7 +19,7 @@ namespace InventorySystem.Application.Features.DirectEntries.Commands.UpdateDire
 
             RuleForEach(invoice => invoice.DirectEntryProducts)
                 .MustAsync(CheckProductCountAvailablityAsync)
-                .WithMessage("Invoice product count cannot be greater than the storage count");
+                .WithMessage("Direct Entry product count cannot be greater than the storage count");
         }
 
         private async Task<bool> CheckProductCountAvailablityAsync(UpdateDirectEntryCommand directEntry, DirectEntryProductModel directEntryProduct,
@@ -35,10 +35,14 @@ namespace InventorySystem.Application.Features.DirectEntries.Commands.UpdateDire
             {
                 int availableCount = await _warehouseRepository.ProductCountAsync(directEntry.WarehouseId, directEntryProduct.ProductId);
 
-                int invoiceProductCount = oldDirectEntry.DirectEntryProducts
+                int directEntryProductCount = oldDirectEntry.DirectEntryProducts
                     .FirstOrDefault(i => i.ProductId == directEntryProduct.ProductId)?.Count ?? 0;
 
-                if ((availableCount + invoiceProductCount) >= directEntryProduct.Count)
+                int updatedDirectEntryProductCount = directEntry.DirectEntryProducts
+                    .Where(i => i.ProductId == directEntryProduct.ProductId)
+                    .Sum(i => i.Count);
+
+                if ((availableCount + directEntryProductCount) >= updatedDirectEntryProductCount)
                     return true;
             }
 

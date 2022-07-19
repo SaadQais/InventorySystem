@@ -45,7 +45,11 @@ namespace InventorySystem.Application.Features.Invoices.Commands.UpdateInvoice
                 int invoiceProductCount = oldInvoice.InvoiceProducts
                     .FirstOrDefault(i => i.ProductId == invoiceProduct.ProductId)?.Count ?? 0;
 
-                if ((availableCount + invoiceProductCount) >= invoiceProduct.Count)
+                int updatedInvoiceProductCount = invoice.InvoiceProducts
+                    .Where(i => i.ProductId == invoiceProduct.ProductId)
+                    .Sum(i => i.Count);
+
+                if ((availableCount + invoiceProductCount) >= updatedInvoiceProductCount)
                     return true;
             }
 
