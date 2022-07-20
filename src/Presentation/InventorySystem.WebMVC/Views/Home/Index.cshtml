@@ -176,10 +176,11 @@
         </div>
     </div>
 </div>    
+
 <script>
-console.log(document.getElementsByClassName('card-chart'));
-let charts = document.getElementsByClassName('card-chart');
-for (let i = 0; i < charts.length; i++) {
+    let charts = document.getElementsByClassName('card-chart');
+
+    for (let i = 0; i < charts.length; i++) {
     var chart = document.getElementById("chart").getContext("2d");
     new Chart(chart, {
       type: "pie",
