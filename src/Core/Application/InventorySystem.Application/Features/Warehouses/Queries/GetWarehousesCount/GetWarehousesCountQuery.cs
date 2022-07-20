@@ -1,5 +1,4 @@
-﻿using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesCount;
-using MediatR;
+﻿using MediatR;
 
 namespace InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesCount
 {

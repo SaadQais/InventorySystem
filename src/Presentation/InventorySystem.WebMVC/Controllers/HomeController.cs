@@ -1,6 +1,7 @@
 ﻿using InventorySystem.Application.Features.Invoices.Queries.GetInvoicesCount;
 using InventorySystem.Application.Features.Products.Queries.GetProductsCount;
 using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesCount;
+using InventorySystem.Application.Features.Warehouses.Queries.GetWarehousesDetails;
 using InventorySystem.Domain.Entities;
 using InventorySystem.WebMVC.Models;
 using MediatR;
@@ -32,6 +33,7 @@ namespace InventorySystem.WebMVC.Controllers
             ViewBag.InvoicesCount = await _mediator.Send(new GetInvoiceCountQuery());
             ViewBag.WarehousesCount = await _mediator.Send(new GetWarehouseCountQuery());
             ViewBag.ProductsCount = await _mediator.Send(new GetProductCountQuery());
+            ViewBag.WarehousesDetails = await _mediator.Send(new GetWarehouseDetailsQuery());
 
             return View();
         }

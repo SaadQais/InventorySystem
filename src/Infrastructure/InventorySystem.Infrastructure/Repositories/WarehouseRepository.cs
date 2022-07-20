@@ -1,4 +1,5 @@
 ﻿using InventorySystem.Application.Contracts.Persistence;
+using InventorySystem.Application.Features.Warehouses.Queries.ViewModels;
 using InventorySystem.Domain.Entities.DirectEntries;
 using InventorySystem.Domain.Entities.Invoices;
 using InventorySystem.Domain.Entities.Warehouses;
@@ -168,6 +169,24 @@ namespace InventorySystem.Infrastructure.Repositories
                 .Where(wp => wp.ProductId == productId)
                 .Where(wp => wp.WarehouseId == warehouseId)
                 .SumAsync(wp => wp.Count);
+        }
+
+        public async Task<IReadOnlyList<WarehouseDetailsViewModel>> GetDashboardDetailsAsync()
+        {
+            var details = await _context.WarehouseProducts
+                .Include(w => w.Warehouse)
+                .Include(w => w.Product)
+                .OrderByDescending(wp => wp.Count)
+                .Take(4)
+                .Select(wp => new WarehouseDetailsViewModel
+                {
+                    Warehouse = wp.Warehouse.Name,
+                    Product = wp.Product.Name,
+                    Count = wp.Count
+                })
+                .ToListAsync();
+
+            return details;
         }
     }
 }
